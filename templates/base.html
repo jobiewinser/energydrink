@@ -1,0 +1,75 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Base Template</title>
+        <!-- Bootstrap CSS -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
+              rel="stylesheet">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Navbar</a>
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarNavDropdown"
+                        aria-controls="navbarNavDropdown"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{% url 'releases' %}">New Releases</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'submit-drink' %}">Submit a Drink</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'review-drink' %}">Review a Drink</a>
+                        </li>
+                        
+                    </ul>
+                </div>
+                <ul class="navbar-nav mb-lg-0 ms-1"  style="height:54px">
+                    {%if request.user.is_authenticated%} 
+                    <li class="nav-item dropstart p-1">
+                        <a class="nav-link text-white p-0 pointer" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="row m-0" style="overflow:hidden">
+                                <div class="col-auto p-0 m-1">
+                                    <img src="{%if user.profile.avatar%}/media/{{user.profile.avatar}}{%else%}{% static 'img/blank-profile-picture.png' %}{%endif%}" alt="" 
+                                        style="width:32px; height:32px;" class="rounded-circle">
+                                </div>
+                                <div class="col-sm p-0 ms-1 nowrap elipses-overflow" style="">
+                                    <strong style="font-size:14px;">{{user.profile}}</strong>
+                                    <hr style="margin:0px; margin-bottom:-3px">
+                                    <span style="font-size:12px; line-height: 0.75em; ">{%if user.profile.site.name%}{{user.profile.site.name}} ({{user.profile.site.subscription.get_name_display}}){%endif%}</span>
+                                </div>
+                                <input hidden id="user_id" value="{{user.pk}}"/>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item pointer" href="/accounts/profile/">Edit Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/accounts/logout/">Sign out</a></li>
+                        </ul>
+                    </li>
+                    {%else%}
+                    <li class="nav-item ">
+                        <a class="pointer btn btn-secondary ms-3" href="/accounts/login/">
+                            Login
+                        </a>
+                    </li>
+                    {%endif%}
+                </ul>
+            </div>
+        </nav>
+        
+        {% block content %}{% endblock %}
+    </body>
+</html>

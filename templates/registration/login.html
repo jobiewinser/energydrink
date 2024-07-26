@@ -1,0 +1,13 @@
+{%extends 'base.html'%}
+{% block content %}
+<div class="row">
+    <div class="col">
+        <form method="POST">
+        <input name="username" class="form-control">
+        <input name="password" type="password" class="form-control">
+        <button type="submit" class="form-control btn-success">Login</button>
+        {% csrf_token %}
+        </form>
+    </div>
+</div>
+{% endblock %}
