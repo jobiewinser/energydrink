@@ -11,23 +11,23 @@ from messaging.models import Message, MessageImage
 from django.dispatch import receiver
 from PIL import Image
 from io import StringIO, BytesIO
-            
+
 from datetime import datetime, timedelta
 from django.core.files.images import ImageFile
 import os
 
-GYM_CHOICES = (
-                    ('a', 'Abingdon'),
-                    ('b', 'Alton'),
-                    ('c', 'Fleet')
-                )
+GYM_CHOICES = (("a", "Abingdon"), ("b", "Alton"), ("c", "Fleet"))
+
 
 class DrinkBrand(models.Model):
     name = models.TextField(null=False, blank=False)
-    
+
+
 class Drink(models.Model):
     name = models.TextField(null=False, blank=False)
-    drink_brand = models.ForeignKey('drink.DrinkBrand', on_delete=models.SET_NULL, null=True, blank=True)
+    drink_brand = models.ForeignKey(
+        "drink.DrinkBrand", on_delete=models.SET_NULL, null=True, blank=True
+    )
     # created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     # REQUEST_TYPE_CHOICES = (
     #                     ('a', 'POST'),
