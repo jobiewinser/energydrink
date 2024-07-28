@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 from dotenv import load_dotenv
 
-env_path = Path("/var/www/energydrink/.env")
+env_path = Path("/var/www/energydrinkrepo/.env")
 load_dotenv(dotenv_path=env_path)
 
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -14,13 +14,14 @@ DEBUG = bool(os.getenv("ENVIRONMENT") == "development")
 ALLOWED_HOSTS = ["*"] if DEBUG else [os.getenv("ALLOWED_HOSTS")]
 
 INSTALLED_APPS = [
-    "core",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "drink",
+    "core",
 ]
 
 MIDDLEWARE = [
@@ -59,8 +60,12 @@ WSGI_APPLICATION = "energydrink.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": os.getenv("DBNAME"),
+        "USER": os.getenv("DBUSER"),
+        "PASSWORD": os.getenv("DBPASSWORD"),
+        "HOST": "localhost",
+        "PORT": "",
     }
 }
 

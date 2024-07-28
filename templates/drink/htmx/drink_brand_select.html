@@ -1,0 +1,12 @@
+<span id="drink_brand_container">
+    <label for="brand" class="form-label">Drink Brand</label>
+    <div class="d-flex" id="">     
+        <select class="select2 form-control" name="drink_brand" id="drink_brand" aria-describedby="brandHelp">
+            {% for brand in brands %}
+            <option {%if brand == selected_brand%}selected{%endif%} value="{{ brand.id }}">{{ brand.name }}{%if not brand.approved%} (Awaiting Approval){%endif%}</option>
+            {% endfor %}
+        </select>
+        <button type="button" class="btn btn-secondary ml-2"  data-bs-toggle="modal" data-bs-target="#drink_brand_submit_modal">Add</button>                     
+    </div>
+    <div id="brandHelp" class="form-text">Select the brand of the drink you are submitting.</div>
+</span>
