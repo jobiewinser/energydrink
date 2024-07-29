@@ -1,12 +1,177 @@
 from django.db import models
+from django_countries.fields import CountryField
 from django.contrib.auth.models import User
 import logging
 
 logger = logging.getLogger(__name__)
 
+CURRENCY_CHOICES = [
+    ("AED", "United Arab Emirates Dirham (د.إ)"),
+    ("AFN", "Afghan Afghani (؋)"),
+    ("ALL", "Albanian Lek (L)"),
+    ("AMD", "Armenian Dram (֏)"),
+    ("ANG", "Netherlands Antillean Guilder (ƒ)"),
+    ("AOA", "Angolan Kwanza (Kz)"),
+    ("ARS", "Argentine Peso ($)"),
+    ("AUD", "Australian Dollar ($)"),
+    ("AWG", "Aruban Florin (ƒ)"),
+    ("AZN", "Azerbaijani Manat (₼)"),
+    ("BAM", "Bosnia-Herzegovina Convertible Mark (KM)"),
+    ("BBD", "Barbadian Dollar ($)"),
+    ("BDT", "Bangladeshi Taka (৳)"),
+    ("BGN", "Bulgarian Lev (лв)"),
+    ("BHD", "Bahraini Dinar (.د.ب)"),
+    ("BIF", "Burundian Franc (FBu)"),
+    ("BMD", "Bermudian Dollar ($)"),
+    ("BND", "Brunei Dollar ($)"),
+    ("BOB", "Bolivian Boliviano (Bs.)"),
+    ("BRL", "Brazilian Real (R$)"),
+    ("BSD", "Bahamian Dollar ($)"),
+    ("BTN", "Bhutanese Ngultrum (Nu.)"),
+    ("BWP", "Botswana Pula (P)"),
+    ("BYN", "Belarusian Ruble (Br)"),
+    ("BZD", "Belize Dollar ($)"),
+    ("CAD", "Canadian Dollar ($)"),
+    ("CDF", "Congolese Franc (FC)"),
+    ("CHF", "Swiss Franc (CHF)"),
+    ("CLP", "Chilean Peso ($)"),
+    ("CNY", "Chinese Yuan (¥)"),
+    ("COP", "Colombian Peso ($)"),
+    ("CRC", "Costa Rican Colón (₡)"),
+    ("CUP", "Cuban Peso (₱)"),
+    ("CVE", "Cape Verdean Escudo ($)"),
+    ("CZK", "Czech Koruna (Kč)"),
+    ("DJF", "Djiboutian Franc (Fdj)"),
+    ("DKK", "Danish Krone (kr)"),
+    ("DOP", "Dominican Peso (RD$)"),
+    ("DZD", "Algerian Dinar (د.ج)"),
+    ("EGP", "Egyptian Pound (£)"),
+    ("ERN", "Eritrean Nakfa (Nkf)"),
+    ("ETB", "Ethiopian Birr (Br)"),
+    ("EUR", "Euro (€)"),
+    ("FJD", "Fijian Dollar ($)"),
+    ("FKP", "Falkland Islands Pound (£)"),
+    ("FOK", "Faroese Króna (kr)"),
+    ("GBP", "British Pound (£)"),
+    ("GEL", "Georgian Lari (₾)"),
+    ("GGP", "Guernsey Pound (£)"),
+    ("GHS", "Ghanaian Cedi (₵)"),
+    ("GIP", "Gibraltar Pound (£)"),
+    ("GMD", "Gambian Dalasi (D)"),
+    ("GNF", "Guinean Franc (FG)"),
+    ("GTQ", "Guatemalan Quetzal (Q)"),
+    ("GYD", "Guyanese Dollar ($)"),
+    ("HKD", "Hong Kong Dollar ($)"),
+    ("HNL", "Honduran Lempira (L)"),
+    ("HRK", "Croatian Kuna (kn)"),
+    ("HTG", "Haitian Gourde (G)"),
+    ("HUF", "Hungarian Forint (Ft)"),
+    ("IDR", "Indonesian Rupiah (Rp)"),
+    ("ILS", "Israeli New Shekel (₪)"),
+    ("IMP", "Isle of Man Pound (£)"),
+    ("INR", "Indian Rupee (₹)"),
+    ("IQD", "Iraqi Dinar (ع.د)"),
+    ("IRR", "Iranian Rial (﷼)"),
+    ("ISK", "Icelandic Króna (kr)"),
+    ("JEP", "Jersey Pound (£)"),
+    ("JMD", "Jamaican Dollar ($)"),
+    ("JOD", "Jordanian Dinar (د.ا)"),
+    ("JPY", "Japanese Yen (¥)"),
+    ("KES", "Kenyan Shilling (KSh)"),
+    ("KGS", "Kyrgyzstani Som (лв)"),
+    ("KHR", "Cambodian Riel (៛)"),
+    ("KID", "Kiribati Dollar ($)"),
+    ("KMF", "Comorian Franc (CF)"),
+    ("KRW", "South Korean Won (₩)"),
+    ("KWD", "Kuwaiti Dinar (د.ك)"),
+    ("KYD", "Cayman Islands Dollar ($)"),
+    ("KZT", "Kazakhstani Tenge (₸)"),
+    ("LAK", "Lao Kip (₭)"),
+    ("LBP", "Lebanese Pound (£)"),
+    ("LKR", "Sri Lankan Rupee (Rs)"),
+    ("LRD", "Liberian Dollar ($)"),
+    ("LSL", "Lesotho Loti (L)"),
+    ("LYD", "Libyan Dinar (ل.د)"),
+    ("MAD", "Moroccan Dirham (د.م)"),
+    ("MDL", "Moldovan Leu (L)"),
+    ("MGA", "Malagasy Ariary (Ar)"),
+    ("MKD", "Macedonian Denar (ден)"),
+    ("MMK", "Burmese Kyat (K)"),
+    ("MNT", "Mongolian Tögrög (₮)"),
+    ("MOP", "Macanese Pataca (P)"),
+    ("MRU", "Mauritanian Ouguiya (UM)"),
+    ("MUR", "Mauritian Rupee (₨)"),
+    ("MVR", "Maldivian Rufiyaa (Rf)"),
+    ("MWK", "Malawian Kwacha (MK)"),
+    ("MXN", "Mexican Peso ($)"),
+    ("MYR", "Malaysian Ringgit (RM)"),
+    ("MZN", "Mozambican Metical (MT)"),
+    ("NAD", "Namibian Dollar ($)"),
+    ("NGN", "Nigerian Naira (₦)"),
+    ("NIO", "Nicaraguan Córdoba (C$)"),
+    ("NOK", "Norwegian Krone (kr)"),
+    ("NPR", "Nepalese Rupee (₨)"),
+    ("NZD", "New Zealand Dollar ($)"),
+    ("OMR", "Omani Rial (ر.ع.)"),
+    ("PAB", "Panamanian Balboa (B/. )"),
+    ("PEN", "Peruvian Sol (S/.)"),
+    ("PGK", "Papua New Guinean Kina (K)"),
+    ("PHP", "Philippine Peso (₱)"),
+    ("PKR", "Pakistani Rupee (₨)"),
+    ("PLN", "Polish Złoty (zł)"),
+    ("PYG", "Paraguayan Guaraní (₲)"),
+    ("QAR", "Qatari Riyal (ر.ق)"),
+    ("RON", "Romanian Leu (lei)"),
+    ("RSD", "Serbian Dinar (дин./int.)"),
+    ("RUB", "Russian Ruble (₽)"),
+    ("RWF", "Rwandan Franc (FRw)"),
+    ("SAR", "Saudi Riyal (ر.س)"),
+    ("SBD", "Solomon Islands Dollar ($)"),
+    ("SCR", "Seychellois Rupee (₨)"),
+    ("SDG", "Sudanese Pound (ج.س.)"),
+    ("SEK", "Swedish Krona (kr)"),
+    ("SGD", "Singapore Dollar ($)"),
+    ("SHP", "Saint Helena Pound (£)"),
+    ("SLL", "Sierra Leonean Leone (Le)"),
+    ("SOS", "Somali Shilling (Sh)"),
+    ("SRD", "Surinamese Dollar ($)"),
+    ("SSP", "South Sudanese Pound (£)"),
+    ("STN", "São Tomé and Príncipe Dobra (Db)"),
+    ("SYP", "Syrian Pound (£)"),
+    ("SZL", "Eswatini Lilangeni (L)"),
+    ("THB", "Thai Baht (฿)"),
+    ("TJS", "Tajikistani Somoni (ЅМ)"),
+    ("TMT", "Turkmenistani Manat (T)"),
+    ("TND", "Tunisian Dinar (د.ت)"),
+    ("TOP", "Tongan Paʻanga (T$)"),
+    ("TRY", "Turkish Lira (₺)"),
+    ("TTD", "Trinidad and Tobago Dollar (TT$)"),
+    ("TVD", "Tuvaluan Dollar ($)"),
+    ("TWD", "New Taiwan Dollar (NT$)"),
+    ("TZS", "Tanzanian Shilling (Sh)"),
+    ("UAH", "Ukrainian Hryvnia (₴)"),
+    ("UGX", "Ugandan Shilling (Sh)"),
+    ("USD", "United States Dollar ($)"),
+    ("UYU", "Uruguayan Peso ($U)"),
+    ("UZS", "Uzbekistani Som (лв)"),
+    ("VES", "Venezuelan Bolívar Soberano (Bs.S.)"),
+    ("VND", "Vietnamese Đồng (₫)"),
+    ("VUV", "Vanuatu Vatu (Vt)"),
+    ("WST", "Samoan Tālā (T)"),
+    ("XAF", "Central African CFA Franc (FCFA)"),
+    ("XCD", "East Caribbean Dollar ($)"),
+    ("XOF", "West African CFA Franc (CFA)"),
+    ("XPF", "CFP Franc (₣)"),
+    ("YER", "Yemeni Rial (﷼)"),
+    ("ZAR", "South African Rand (R)"),
+    ("ZMW", "Zambian Kwacha (ZK)"),
+    ("ZWL", "Zimbabwean Dollar ($)"),
+]
+
 
 class Profile(models.Model):
-    admin = models.BooleanField(default=False)
+    PROFILE_CURRENCY_CHOICES = CURRENCY_CHOICES
+    admin = models.BooleanField(default=False, blank=True)
     created = models.DateTimeField(
         auto_now_add=True,
         null=True,
@@ -24,25 +189,22 @@ class Profile(models.Model):
         null=True,
         blank=True,
     )
-    theme = models.CharField(max_length=10, default="light")
-    city = models.ForeignKey(
-        "core.City",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
+    theme = models.CharField(max_length=10, default="light", blank=True)
+    # city = models.ForeignKey(
+    #     "core.City",
+    #     on_delete=models.SET_NULL,
+    #     null=True,
+    #     blank=True,
+    # )
+    country_purchased = CountryField(
+        blank_label="(select country)", blank=True, null=True
     )
+    currency = models.CharField(choices=PROFILE_CURRENCY_CHOICES, blank=True, null=True)
 
 
-class Country(models.Model):
-    name = models.CharField(max_length=100)
+# class City(models.Model):
+#     name = models.CharField(max_length=100)
+#     country = models.ForeignKey(Country, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.name
-
-
-class City(models.Model):
-    name = models.CharField(max_length=100)
-    country = models.ForeignKey(Country, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.name}, {self.country.name}"
+#     def __str__(self):
+#         return f"{self.name}, {self.country.name}"

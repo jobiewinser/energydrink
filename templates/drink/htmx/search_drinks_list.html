@@ -1,0 +1,19 @@
+<!-- List -->
+LIST
+<div class="row">
+    {% for drink in drinks %}
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <img src="{{ drink.image.url }}" class="card-img-top" alt="{{ drink.name }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ drink.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ drink.drink_brand.name }}</h6>
+                <p class="card-text">Submitted By: {{ drink.submitted_by.username }}</p>
+                <p class="card-text">Caffeine: {{ drink.caffeine_per_hundred_ml }} mg/100ml</p>
+                <p class="card-text">Average Taste: {{ drink.avg_taste }}</p>
+                <p class="card-text">Average Aftetaste: {{ drink.avg_after_taste }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>

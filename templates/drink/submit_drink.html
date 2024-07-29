@@ -13,7 +13,8 @@
                     hx-post="{% url 'submit-drink-brand'%}" 
                     hx-target="#drink_brand_container" 
                     hx-swap="outerHTML"
-                     hx-indicator="#page_load_indicator">
+                    hx-indicator="#page_load_indicator"
+                    hx-push-url="true">
                     <div class="mb-3">
                         <label for="brand_name" class="form-label">Brand Name</label>
                         <input type="text" class="form-control" id="brand_name" name="brand_name" aria-describedby="brand_name">
@@ -41,7 +42,8 @@
                 hx-post="{% url 'submit-drink' %}"
                 hx-indicator="#page_load_indicator"
                 hx-target="#content"
-                hx-swap="innerHTML">
+                hx-swap="innerHTML"
+                hx-push-url="true">
                 <div class="mb-3">
                     <label for="drink_name" class="form-label">Drink Name</label>
                     <input type="text" class="form-control" id="drink_name" name="drink_name" aria-describedby="drink_name">
@@ -51,7 +53,7 @@
                     {%include 'drink/htmx/drink_brand_select.html'%}
                 </div>
                 <div class="mb-3">
-                    <label for="drink_name" class="form-label">Images</label>
+                    <label for="drink_name" class="form-label">Image</label>
                     <input name="image" placeholder="test" type="file" class="form-control modify_user_input" id="customFile" />
                 </div>
                 

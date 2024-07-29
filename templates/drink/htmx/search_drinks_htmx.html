@@ -1,0 +1,79 @@
+
+<span>    
+    <div class="row m-2">
+        <form class="form-inline" id="search-drinks-form"
+            {% comment %} hx-include=".search-drinks-input" {% endcomment %}
+            >
+            <div class="row mt-3">
+                <!-- Filters -->
+                <div class="col-3">
+                    <h5>Filters</h5>
+                    <hr>
+                    <label for="site_pks" style="width:100%">
+                        Drink Brands <br>
+                    <select multiple="multiple" style="width:100%" class="form-control select2tag search-drinks-input" name="drink_brand" onchange="">
+                        {%for drink_brand in drink_brands%}
+                        <option value="{{drink_brand.pk}}">{{drink_brand.name}}</option>
+                        {%endfor%}
+                    </select>
+                    </label>
+                    <hr>
+                    <h6>Average Taste</h6>
+                    <input type="range" class="form-control-range search-drinks-input" id="tasteRange" min="0" max="100">
+                    <hr>
+                    <h6>Average After Taste</h6>
+                    <input type="range" class="form-control-range search-drinks-input" id="afterTasteRange" min="0" max="100">
+                </div>
+                
+                <div class="col">
+                    <div class="row mt-3">
+                        <div class="col mr-1 p-0">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search for drinks..." aria-label="Search">
+                        </div>
+                        <div class="col-auto ms-1 p-0">
+                            <button form="search-drinks-form" class="btn btn-outline-success my-2 my-sm-0" type="submit" id="search-drinks-button">Search</button>
+                        </div>
+                        <div class="col-auto">
+                            <select class="form-control search-drinks-input" name="sort">
+                                <option value="" disabled selected>Sort By...</option>
+                                <option value="caffeine_asc">Caffeine (mg/100ml) - ↑</option>
+                                <option value="caffeine_desc">Caffeine (mg/100ml) - ↓</option>
+                                <option value="reviews_asc">Number of Reviews - ↑</option>
+                                <option value="reviews_desc">Number of Reviews - ↓</option>
+                                <option value="taste_asc">Average Taste - ↑</option>
+                                <option value="taste_desc">Average Taste - ↓</option>
+                                <option value="after_taste_asc">Average Aftertaste - ↑</option>
+                                <option value="after_taste_desc">Average Aftertaste - ↓</option>
+                                <option value="name_asc">Name - ↑</option>
+                                <option value="name_desc">Name - ↓</option>
+                                <option value="brand_name_asc">Brand Name - ↑</option>
+                                <option value="brand_name_desc">Brand Name - ↓</option>
+                            </select>
+                        </div>
+                        <div class="col-auto">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="view" id="view1" value="gallery" checked>
+                                <label class="form-check-label" for="view1">
+                                Gallery
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="view" id="view2" value="list">
+                                <label class="form-check-label" for="view2">
+                                List
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3" id="search-drinks-contents">
+                        {%if view == 'list'%}
+                        {% include 'drink/htmx/search_drinks_list.html'%}
+                        {%else%}
+                        {% include 'drink/htmx/search_drinks_gallery.html'%}
+                        {%endif%}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</span>

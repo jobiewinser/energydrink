@@ -1,0 +1,24 @@
+{%load drink_tags%}
+<div class="row">
+    {% for drink in drinks %}
+    <div class="col-md-4 mb-3">
+        <div class="card pointer" onclick="window.location.replace('{%url 'view-drink' pk=drink.pk%}')">
+            <div class="center">
+                <img src="{{ drink.image.url }}" class="card-img-top" alt="{{ drink.name }}" style="padding:6px; max-width:200px; max-height:200px; width: auto; height: auto;">
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ drink.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ drink.drink_brand.name }}</h6>
+                <p class="card-text">Caffeine: {{ drink.caffeine_per_hundred_ml }}<span class="text-black-50" style="font-size:12px">mg/100ml</span></p>
+                <div class="taste-rating">
+                    {% with drink.average_taste|stars as star_info %}
+                      {% comment %} {% for star in 1|to:11 %}
+                        <i class="fa {% if star <= star_info.full_stars %}fa-star{% elif star == star_info.full_stars|add:1 and star_info.half_star %}fa-star-half-alt{% else %}fa-star-o{% endif %}"></i>
+                      {% endfor %} {% endcomment %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>

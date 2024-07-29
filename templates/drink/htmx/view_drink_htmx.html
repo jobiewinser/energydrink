@@ -7,18 +7,18 @@
             <div class="card p-3">
                 <div class="row">
                     <div class="col-auto">
-                        <h3 class="nowrap">{{drink.drink_brand.name}}</h3>
-
-                        <h5 class="text-black-50 nowrap">{{drink.drink_brand.name}}</h3>
-                        <span class="nowrap">Flavour: 10<span class="text-black-50" style="font-size:12px">/10</span></span>
+                        <h5 class="card-title">{{ drink.name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ drink.drink_brand.name }}</h6>
+                        <span class="nowrap">Reviewed Flavour: {{drink.average_taste}}<span class="text-black-50" style="font-size:12px">/10</span></span>
                         <br>
-                        <span class="nowrap">Aftertaste: 10<span class="text-black-50" style="font-size:12px">/10</span></span>
+                        <span class="nowrap">Reviewed Aftertaste: {{drink.average_aftertaste}}<span class="text-black-50" style="font-size:12px">/10</span></span>
                         <br>
                         <br>
                         <span class="nowrap">Caffeine: 32mg/100ml</span>
                         <br>
                         <span class="nowrap">Sizes: 250ml/355ml/473ml</span>
                         <br>
+                        <a href="{%url 'review-drink' pk=pk%}" class="nowrap">Review this Drink!</a>
                         
                     </div>
                     <div class="col-auto right">

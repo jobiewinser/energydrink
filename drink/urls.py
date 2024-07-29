@@ -10,4 +10,9 @@ urlpatterns = [
     path("submit-drink/", drinkviews.SubmitDrinkView.as_view(), name="submit-drink"),
     path("search-drinks/", drinkviews.SearchDrinksView.as_view(), name="search-drinks"),
     path("view-drink/<int:pk>/", drinkviews.ViewDrinkView.as_view(), name="view-drink"),
+    path(
+        "review-drink/<int:pk>/",
+        drinkviews.ReviewDrinkView.as_view(),
+        name="review-drink",
+    ),
 ]

@@ -6,16 +6,21 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.shortcuts import redirect
+from django_countries import countries
+import core.models as coremodels
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(login_required, name="dispatch")
 class ReleasesView(TemplateView):
     template_name = "drink/releases.html"
 
     def post(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
-@method_decorator(login_required, name='dispatch')
+
+@method_decorator(login_required, name="dispatch")
 class SubmitDrinkView(TemplateView):
     template_name = "drink/submit_drink.html"
 
@@ -55,23 +60,74 @@ class SubmitDrinkView(TemplateView):
         return render(request, f"drink/htmx/view_drink_htmx.html", context)
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(login_required, name="dispatch")
+class ReviewDrinkView(TemplateView):
+    template_name = "drink/review_drink.html"
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["drink"] = drinkmodels.Drink.objects.get(pk=kwargs["pk"])
+        context["countries"] = dict(countries)
+        context["currencies"] = coremodels.CURRENCY_CHOICES
+        return context
+
+    def post(self, request, *args, **kwargs):
+        taste = request.POST["taste"]
+        if not taste:
+            return HttpResponse("Please rate the Taste", status=400)
+        aftertaste = request.POST["aftertaste"]
+        if not aftertaste:
+            return HttpResponse("Please rate the Aftertaste", status=400)
+        pk = kwargs["pk"]
+        drink = drinkmodels.Drink.objects.get(pk=pk)
+        title = request.POST['title'] or None
+        description = request.POST['description'] or None
+        country_purchased = request.POST['country_purchased'] or None
+        price_paid = request.POST['price_paid'] or None
+        currency = request.POST['currency'] or None
+        currency = request.POST['currency'] or None
+        image = request.FILES.get("image") or None
+        drinkmodels.Review.objects.create(
+            submitted_by=request.user,
+            taste=taste,
+            aftertaste=aftertaste,
+            title=title,
+            description=description,
+            drink=drink,
+            image=image,
+            country_purchased=country_purchased,
+            price_paid=price_paid,
+            currency=currency,
+        )
+        response = HttpResponse( status=200)
+        response["HX-Redirect"] = f"/search-drinks/"
+        return response
+    
+
+@method_decorator(login_required, name="dispatch")
 class SearchDrinksView(TemplateView):
     template_name = "drink/search_drinks.html"
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        view = kwargs.get("view", "gallery")
+        if self.request.META.get("HTTP_HX_REQUEST", "false") == "true":
+            self.template_name = f"drinks/htmx/search_drinks_{view}_htmx.html"
         context = super().get_context_data(**kwargs)
         context["unapproved_drinks"] = drinkmodels.Drink.objects.filter(
             approved=False, submitted_by=self.request.user
         )
-        context["drinks"] = drinkmodels.Drink.objects.filter(approved=True)
+        context["drinks"] = drinkmodels.Drink.objects.all()
+        if not self.request.user.is_superuser:
+            context["drinks"] = context["drinks"].filter(approved=True)
+
+        context["drink_brands"] = drinkmodels.DrinkBrand.objects.all()
         return context
 
     def post(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(login_required, name="dispatch")
 class ViewDrinkView(TemplateView):
     template_name = "drink/view_drink.html"
 

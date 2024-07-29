@@ -1,0 +1,171 @@
+{%extends 'base.html'%}
+{% block content %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        setupStars('taste');
+        setupStars('aftertaste');
+    });
+    function setupStars(key) {
+            const stars = document.querySelectorAll('#'+key+'-panel .star');
+            const ratingValue = document.getElementById(key+'-value');
+        
+            stars.forEach((star, index) => {
+                star.addEventListener('click', () => {
+                    ratingValue.value = index + 1;
+                    highlightStars(index);
+                });
+                star.addEventListener('mouseover', () => {
+                    highlightStars(index);
+                });
+                star.addEventListener('mouseleave', () => {
+                    highlightStars(ratingValue.value - 1);
+                });
+            });
+        
+            function highlightStars(index) {
+                stars.forEach((star, i) => {
+                    star.classList.toggle('checked', i <= index);
+                });
+            }
+        
+            // Initialize with no stars highlighted
+            highlightStars(ratingValue.value - 1);
+    }
+</script>
+<style>    
+    .star-rating {
+        display: flex;
+        flex-direction: row;
+    }
+    
+    .star {
+        font-size: 1.5em; /* Make the stars smaller */
+        color: #ccc;
+        cursor: pointer;
+        transition: color 0.3s;
+    }
+    
+    .star.checked {
+        color: #ffbd00;
+    }
+</style>
+<div class="row mt-3">
+    <div class="col">
+    </div>
+    <div class="col-auto">
+        <div class="card p-3">
+            <div class="row">
+                <div class="col">
+                    <form id="review_form"
+                        autocomplete="off" autofill="off"
+                        hx-encoding="multipart/form-data" hx-trigger="submit"
+                        hx-post="{% url 'review-drink' pk=pk %}"
+                        hx-indicator="#page_load_indicator"
+                        hx-target="#content"
+                        hx-swap="innerHTML"
+                        hx-push-url="true">
+
+                        <div class="mb-3" id="taste-panel">
+                            <label for="title" class="form-label mb-0">Taste</label>                
+                            <div class="star-rating">
+                                <span class="star" data-rating="1"><i class="fas fa-star"></i></span>
+                                <span class="star" data-rating="2"><i class="fas fa-star"></i></span>
+                                <span class="star" data-rating="3"><i class="fas fa-star"></i></span>
+                                <span class="star" data-rating="4"><i class="fas fa-star"></i></span>
+                                <span class="star" data-rating="5"><i class="fas fa-star"></i></span>
+                                <span class="star" data-rating="6"><i class="fas fa-star"></i></span>
+                                <span class="star" data-rating="7"><i class="fas fa-star"></i></span>
+                                <span class="star" data-rating="8"><i class="fas fa-star"></i></span>
+                                <span class="star" data-rating="9"><i class="fas fa-star"></i></span>
+                                <span class="star" data-rating="10"><i class="fas fa-star"></i></span>
+                            </div>
+                            <input type="hidden" id="taste-value" name="taste" value="">
+                            <div id="description_help" class="form-text">How good is the taste of the drink.</div>
+                        </div>
+
+                        <div class="mb-3" id="aftertaste-panel">
+                            <label for="title" class="form-label mb-0">Aftertaste</label>                
+                            <div class="star-rating">
+                                <span class="star" data-rating="1"><i class="fas fa-star"></i></span>
+                                <span class="star" data-rating="2"><i class="fas fa-star"></i></span>
+                                <span class="star" data-rating="3"><i class="fas fa-star"></i></span>
+                                <span class="star" data-rating="4"><i class="fas fa-star"></i></span>
+                                <span class="star" data-rating="5"><i class="fas fa-star"></i></span>
+                                <span class="star" data-rating="6"><i class="fas fa-star"></i></span>
+                                <span class="star" data-rating="7"><i class="fas fa-star"></i></span>
+                                <span class="star" data-rating="8"><i class="fas fa-star"></i></span>
+                                <span class="star" data-rating="9"><i class="fas fa-star"></i></span>
+                                <span class="star" data-rating="10"><i class="fas fa-star"></i></span>
+                            </div>
+                            <input type="hidden" id="aftertaste-value" name="aftertaste" value="">
+                            <div id="description_help" class="form-text">How good is the aftertaste of the drink.</div>
+                        </div>
+
+                        <p>
+                            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-review-panel" aria-expanded="false" aria-controls="advanced-review-panel">
+                            Tell us more
+                            </button>
+                        </p>
+                        <hr>
+                        <div class="collapse" id="advanced-review-panel">
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Review Title <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
+                                <input type="text" class="form-control" id="title" name="title" aria-describedby="title">
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
+                                <input type="text" class="form-control" id="description" name="description" aria-describedby="description">
+                                <div id="description_help" class="form-text">Describe how the drinks tastes.</div>
+                            </div>
+                            <div class="mb-3 row">
+                                <div class="col-auto">
+                                    <label for="currency" class="form-label">Currency <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
+                                    <select class="select2 form-control" name="currency" id="currency" aria-describedby="brandHelp">
+                                        {% for currency in currencies %}
+                                        <option value="{{ currency.0 }}">{{ currency.1 }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col" style="min-width:200px">
+                                    <label for="price_paid" class="form-label">Price Paid <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
+                                    <input type="number" class="form-control" id="price_paid" name="price_paid" aria-describedby="price_paid" min="1" step="any" />
+                                    <div id="price_paid_help" class="form-text">How much did you pay for the drink.</div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="drink_name" class="form-label">Image <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
+                                <input name="image" placeholder="image" type="file" class="form-control modify_user_input" id="review-file" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="drink_name" class="form-label">Country Purchased <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
+                                <select class="select2 form-control" name="country_purchased" id="country_purchased" aria-describedby="brandHelp">
+                                    {% for country_code, country in countries.items %}
+                                    <option value="{{ country_code }}">{{ country }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <div class="col-auto">
+                    <div class="card pointer" onclick="window.location.replace('{%url 'view-drink' pk=drink.pk%}')">
+                        <div class="center">
+                            <img src="{{ drink.image.url }}" class="card-img-top" alt="{{ drink.name }}" style="padding:6px; max-width:200px; max-height:200px; width: auto; height: auto;">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ drink.name }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ drink.drink_brand.name }}</h6>
+                            <p class="card-text">Caffeine: {{ drink.caffeine_per_hundred_ml }}<span class="text-black-50" style="font-size:12px">mg/100ml</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+    </div>
+</div>
+{% endblock %}

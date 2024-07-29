@@ -17,7 +17,8 @@
         <link rel="stylesheet" href="{% static 'css/select2-bootstrap-5-theme.1.3.0.rtl.min.css' %}"/>
         <script src="{% static 'js/htmx.min.js' %}"></script>       
         <link href="{% static 'css/snackbar.css' %}" rel="stylesheet" />
-        <script src="{% static 'js/snackbar.js' %}"></script> 
+        <script src="{% static 'js/snackbar.js' %}"></script>                    
+        <script src="{% static 'js/fontawesome.js' %}"></script>
 
         <style>
             .left {
@@ -52,14 +53,23 @@
         <script>                 
             $(document).ready(function() {
                 select2stuff()
-
                 function select2stuff(){
-                    return
                     $('.select2:not([data-select2-id])').select2({
                         searchInputPlaceholder: '🔎 Search here...',        
                         theme: 'bootstrap-5',
                     })
                 }
+                $('.select2tag:not([data-select2-id])').select2({     
+                    tags: true,
+                    createTag: function (tag) {
+                        return {id: tag.term, text: tag.term, tag: true};
+                    }
+                })
+                $('.select2tag').on('select2:open', function (e) {
+                    const evt = "scroll.select2";
+                    $(e.target).parents().off(evt);
+                    $(window).off(evt);
+                });
 
                 function snackbarShow(message, bootstrap_colour, display_ms=3000) {
                     // Get the snackbar DIV

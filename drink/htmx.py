@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
+
 @login_required
 def submit_drink_brand(request):
     name = request.POST.get("brand_name")
