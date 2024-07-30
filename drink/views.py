@@ -1,5 +1,5 @@
 import drink.models as drinkmodels
-from django.db.models import Q
+from django.db.models import Q, Count
 from typing import Any
 from django.views.generic import TemplateView
 from django.shortcuts import render
@@ -10,7 +10,6 @@ from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django_countries import countries
 import core.models as coremodels
-
 
 @method_decorator(login_required, name="dispatch")
 class ReleasesView(TemplateView):
@@ -80,12 +79,12 @@ class ReviewDrinkView(TemplateView):
             return HttpResponse("Please rate the Aftertaste", status=400)
         pk = kwargs["pk"]
         drink = drinkmodels.Drink.objects.get(pk=pk)
-        title = request.POST['title'] or None
-        description = request.POST['description'] or None
-        country_purchased = request.POST['country_purchased'] or None
-        price_paid = request.POST['price_paid'] or None
-        currency = request.POST['currency'] or None
-        currency = request.POST['currency'] or None
+        title = request.POST["title"] or None
+        description = request.POST["description"] or None
+        country_purchased = request.POST["country_purchased"] or None
+        price_paid = request.POST["price_paid"] or None
+        currency = request.POST["currency"] or None
+        currency = request.POST["currency"] or None
         image = request.FILES.get("image") or None
         drinkmodels.Review.objects.create(
             submitted_by=request.user,
@@ -99,10 +98,10 @@ class ReviewDrinkView(TemplateView):
             price_paid=price_paid,
             currency=currency,
         )
-        response = HttpResponse( status=200)
+        response = HttpResponse(status=200)
         response["HX-Redirect"] = f"/search-drinks/"
         return response
-    
+
 
 @method_decorator(login_required, name="dispatch")
 class SearchDrinksView(TemplateView):
@@ -111,16 +110,39 @@ class SearchDrinksView(TemplateView):
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         view = kwargs.get("view", "gallery")
         if self.request.META.get("HTTP_HX_REQUEST", "false") == "true":
-            self.template_name = f"drinks/htmx/search_drinks_{view}_htmx.html"
+            self.template_name = f"drink/htmx/search_drinks_{view}_htmx.html"
         context = super().get_context_data(**kwargs)
         context["unapproved_drinks"] = drinkmodels.Drink.objects.filter(
             approved=False, submitted_by=self.request.user
         )
-        context["drinks"] = drinkmodels.Drink.objects.all()
+        drinks = drinkmodels.Drink.objects.all()
         if not self.request.user.is_superuser:
-            context["drinks"] = context["drinks"].filter(approved=True)
+            drinks = drinks.filter(approved=True)
 
         context["drink_brands"] = drinkmodels.DrinkBrand.objects.all()
+        taste = self.request.GET.get('taste')
+        aftertaste = self.request.GET.get('aftertaste')
+        sort = self.request.GET.get('sort')
+        drink_brand = self.request.GET.get('drink_brand')
+        search = self.request.GET.get('search')
+        if taste:
+            drinks = drinks.filter(average_taste__gte=taste)
+        if aftertaste:
+            drinks = drinks.filter(average_aftertaste__gte=aftertaste)
+        if sort:
+            if 'review_drink' in sort:
+                drinks = drinks.annotate(count=Count("review_drink"))
+                if sort == 'review_drink__count':
+                    drinks = drinks.order_by('count')
+                elif sort == '-review_drink__count':
+                    drinks = drinks.order_by('-count')
+            else:
+                drinks = drinks.order_by(sort)
+        if drink_brand:
+            drinks = drinks.filter(drink_brand__id=drink_brand)
+        if search:
+            drinks = drinks.filter(Q(name__icontains=search)|Q(drink_brand__name__icontains=search))
+        context["drinks"] = drinks
         return context
 
     def post(self, request, *args, **kwargs):

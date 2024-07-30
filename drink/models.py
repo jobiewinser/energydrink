@@ -6,13 +6,17 @@ from core.models import CURRENCY_CHOICES
 from django.db.models import Avg
 import math
 
-def save_average_drink_reviews(drink):    
+
+def save_average_drink_reviews(drink):
     avrg_taste = drink.review_drink.aggregate(Avg("taste"))["taste__avg"]
     drink.average_taste = round(avrg_taste if avrg_taste is not None else 0, 0)
 
     avrg_aftertaste = drink.review_drink.aggregate(Avg("aftertaste"))["aftertaste__avg"]
-    drink.average_aftertaste = round(avrg_aftertaste if avrg_aftertaste is not None else 0, 0)
+    drink.average_aftertaste = round(
+        avrg_aftertaste if avrg_aftertaste is not None else 0, 0
+    )
     drink.save(calculate_average_reviews=False)
+
 
 class DrinkBrand(models.Model):
     name = models.TextField(null=False)
@@ -59,9 +63,19 @@ class Drink(models.Model):
     image = models.ImageField(default="default.png", upload_to="drinks")
     average_taste = models.IntegerField(null=False, blank=True, default=0)
     average_aftertaste = models.IntegerField(null=False, blank=True, default=0)
-
+    caffeine_per_hundred_ml = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        null=True,
+        blank=True,
+    )
     def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None, calculate_average_reviews=True
+        self,
+        force_insert=False,
+        force_update=False,
+        using=None,
+        update_fields=None,
+        calculate_average_reviews=True,
     ):
         super(Drink, self).save(force_insert, force_update, using, update_fields)
         if calculate_average_reviews:
@@ -100,7 +114,9 @@ class Review(models.Model):
         related_name="review_drink",
     )
     image = models.ImageField(default="default.png", upload_to="reviews")
-    country_purchased = CountryField(blank_label="(select country)", blank=True, null=True)
+    country_purchased = CountryField(
+        blank_label="(select country)", blank=True, null=True
+    )
     # city_purchased = models.ForeignKey(
     #     "core.Country",
     #     on_delete=models.SET_NULL,

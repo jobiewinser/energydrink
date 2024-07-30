@@ -17,10 +17,10 @@
                     <div class="taste-rating">
                         <div class="row">
                             <div class="col-auto nowrap pt-2 pr-2" style="font-size:8px">
-                                {% for star in 1|range_tag:drink.average_taste %}
+                                {% for star in 0|range_tag:drink.average_taste %}
                                 <i class="fas fa-star yellow-star"></i>
                                 {% endfor %}
-                                {% for star in drink.average_taste|range_tag:11 %}
+                                {% for star in drink.average_taste|range_tag:10 %}
                                 <i class="fas fa-star grey-star"></i>
                                 {% endfor %}
                             </div>
@@ -32,10 +32,10 @@
                     <div class="aftertaste-rating">
                         <div class="row">
                             <div class="col-auto nowrap pt-2 pr-2" style="font-size:8px">
-                                {% for star in 1|range_tag:drink.average_aftertaste %}
+                                {% for star in 0|range_tag:drink.average_aftertaste %}
                                 <i class="fas fa-star yellow-star"></i>
                                 {% endfor %}
-                                {% for star in drink.average_aftertaste|range_tag:11 %}
+                                {% for star in drink.average_aftertaste|range_tag:10 %}
                                 <i class="fas fa-star grey-star"></i>
                                 {% endfor %}
                             </div>
