@@ -67,9 +67,9 @@
                     </div>
                     <div class="row mt-3" id="search-drinks-contents">
                         {%if view == 'list'%}
-                        {% include 'drink/htmx/search_drinks_list.html'%}
+                        {% include 'drink/htmx/search_drinks_list_htmx.html'%}
                         {%else%}
-                        {% include 'drink/htmx/search_drinks_gallery.html'%}
+                        {% include 'drink/htmx/search_drinks_gallery_htmx.html'%}
                         {%endif%}
                     </div>
                 </div>

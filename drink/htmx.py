@@ -24,5 +24,5 @@ def submit_drink_brand(request):
             ),
             "selected_brand": drink_brand,
         }
-        return render(request, f"drink/htmx/drink_brand_select.html", context)
+        return render(request, f"drink/htmx/drink_brand_select_htmx.html", context)
     return HttpResponse("Please enter a valid Brand Name", status=400)

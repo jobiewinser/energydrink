@@ -49,6 +49,12 @@
             .pointer {
                 cursor: pointer;
             }
+            .fa-star {
+                color: #ccc;
+            }
+            .star-yellow {
+                color: #ffbd00;
+            }
         </style>
         <script>                 
             $(document).ready(function() {
@@ -112,7 +118,7 @@
         <img class="htmx-indicator" id="page_load_indicator" src="{% static 'img/bars.svg' %}"/>
         <nav class="navbar navbar-expand-lg bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Caffeine Collection</a>
+                <a class="navbar-brand" href="{% url 'search-drinks' %}">Caffeine Collection</a>
                 <button class="navbar-toggler"
                         type="button"
                         data-bs-toggle="collapse"
