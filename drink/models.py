@@ -6,6 +6,14 @@ from core.models import CURRENCY_CHOICES
 from django.db.models import Avg
 import math
 
+def save_average_drink_reviews(drink):    
+    avrg_taste = drink.review_drink.aggregate(Avg("taste"))["taste__avg"]
+    drink.average_taste = round(avrg_taste if avrg_taste is not None else 0, 0)
+
+    avrg_aftertaste = drink.review_drink.aggregate(Avg("aftertaste"))["aftertaste__avg"]
+    drink.average_aftertaste = round(avrg_aftertaste if avrg_aftertaste is not None else 0, 0)
+    drink.save(calculate_average_reviews=False)
+
 class DrinkBrand(models.Model):
     name = models.TextField(null=False)
     submitted_by = models.ForeignKey(
@@ -51,6 +59,13 @@ class Drink(models.Model):
     image = models.ImageField(default="default.png", upload_to="drinks")
     average_taste = models.IntegerField(null=False, blank=True, default=0)
     average_aftertaste = models.IntegerField(null=False, blank=True, default=0)
+
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None, calculate_average_reviews=True
+    ):
+        super(Drink, self).save(force_insert, force_update, using, update_fields)
+        if calculate_average_reviews:
+            save_average_drink_reviews(self)
 
 
 class Review(models.Model):
@@ -111,9 +126,4 @@ class Review(models.Model):
         super(Review, self).save(force_insert, force_update, using, update_fields)
         drink = self.drink
         if drink:
-            avrg_taste = drink.review_drink.aggregate(Avg("taste"))["taste__avg"]
-            drink.average_taste = round(avrg_taste if avrg_taste is not None else 0, 0)
-
-            avrg_aftertaste = drink.review_drink.aggregate(Avg("aftertaste"))["aftertaste__avg"]
-            drink.average_aftertaste = round(avrg_aftertaste if avrg_aftertaste is not None else 0, 0)
-            drink.save()
+            save_average_drink_reviews(drink)

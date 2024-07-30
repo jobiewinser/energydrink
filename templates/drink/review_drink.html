@@ -59,7 +59,7 @@
                     <form id="review_form"
                         autocomplete="off" autofill="off"
                         hx-encoding="multipart/form-data" hx-trigger="submit"
-                        hx-post="{% url 'review-drink' pk=pk %}"
+                        hx-post="{% url 'review-drink' pk=drink.pk %}"
                         hx-indicator="#page_load_indicator"
                         hx-target="#content"
                         hx-swap="innerHTML"

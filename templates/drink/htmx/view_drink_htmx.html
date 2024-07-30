@@ -1,36 +1,52 @@
 {%load static %}
+{%load core_tags drink_tags%}
 <span>    
     <div class="row mt-3">
         <div class="col">
         </div>
         <div class="col-auto">
-            <div class="card p-3">
-                <div class="row">
-                    <div class="col-auto">
-                        <h5 class="card-title">{{ drink.name }}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">{{ drink.drink_brand.name }}</h6>
-                        <span class="nowrap">Reviewed Flavour: {{drink.average_taste}}<span class="text-black-50" style="font-size:12px">/10</span></span>
-                        <br>
-                        <span class="nowrap">Reviewed Aftertaste: {{drink.average_aftertaste}}<span class="text-black-50" style="font-size:12px">/10</span></span>
-                        <br>
-                        <br>
-                        <span class="nowrap">Caffeine: 32mg/100ml</span>
-                        <br>
-                        <span class="nowrap">Sizes: 250ml/355ml/473ml</span>
-                        <br>
-                        <a href="{%url 'review-drink' pk=pk%}" class="nowrap">Review this Drink!</a>
-                        
+            <div class="card">
+                <div class="center">
+                    <img src="{{ drink.image.url }}" class="card-img-top" alt="{{ drink.name }}" style="padding:6px; max-width:180px; max-height:180px; width: auto; height: auto;">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ drink.name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ drink.drink_brand.name }}</h6>
+                    <p class="card-text mb-0" style="font-size:13px">{%if drink.caffeine_per_hundred_ml is not None%}{{ drink.caffeine_per_hundred_ml }}{%else%}?{%endif%} <span class="text-black-50" style="font-size:12px">mg/100ml</span></p>
+                    {%if drink.average_taste and drink.average_aftertaste%}
+                    <div class="taste-rating">
+                        <div class="row">
+                            <div class="col-auto nowrap pt-2 pr-2" style="font-size:8px">
+                                {% for star in 1|range_tag:drink.average_taste %}
+                                <i class="fas fa-star yellow-star"></i>
+                                {% endfor %}
+                                {% for star in drink.average_taste|range_tag:11 %}
+                                <i class="fas fa-star grey-star"></i>
+                                {% endfor %}
+                            </div>
+                            <div class="col pl-0">
+                                <span class="card-text" style="font-size:13px">Taste</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-auto right">
-                        <img src="/media/{{drink.image}}" 
-                            alt="" 
-                            style="padding:6px; max-height: 150px; max-width: 150px;" 
-                            class="">
-                        <br>
-                        <span class="nowrap"><span class="text-black-50 mr-1" style="font-size:12px">Submitted By: </span><a href="#">{{drink.submitted_by}}</a></span>
-                        <br>
-                        <a class="ml-2" href="#" style="font-size:12px">100 reviews</a>
+                    <div class="aftertaste-rating">
+                        <div class="row">
+                            <div class="col-auto nowrap pt-2 pr-2" style="font-size:8px">
+                                {% for star in 1|range_tag:drink.average_aftertaste %}
+                                <i class="fas fa-star yellow-star"></i>
+                                {% endfor %}
+                                {% for star in drink.average_aftertaste|range_tag:11 %}
+                                <i class="fas fa-star grey-star"></i>
+                                {% endfor %}
+                            </div>
+                            <div class="col pl-0">
+                                <span class="card-text" style="font-size:13px">Aftertaste</span>
+                            </div>
+                        </div>
                     </div>
+                    {%else%}
+                    <a href="{%url 'review-drink' pk=drink.pk%}" class="nowrap">Be the first to review!</a>
+                    {%endif%}
                 </div>
             </div>
         </div>
