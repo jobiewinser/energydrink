@@ -104,12 +104,22 @@ class ReviewDrinkView(TemplateView):
 
 
 @method_decorator(login_required, name="dispatch")
+class ReviewsView(TemplateView):
+    template_name = "drink/reviews.html"
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["drink"] = drinkmodels.Drink.objects.get(pk=kwargs["pk"])
+        return context
+
+
+@method_decorator(login_required, name="dispatch")
 class SearchDrinksView(TemplateView):
     template_name = "drink/search_drinks.html"
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        view = kwargs.get("view", "gallery")
         if self.request.META.get("HTTP_HX_REQUEST", "false") == "true":
+            view = self.request.GET.get("view", "gallery")
             self.template_name = f"drink/htmx/search_drinks_{view}_htmx.html"
         context = super().get_context_data(**kwargs)
         context["unapproved_drinks"] = drinkmodels.Drink.objects.filter(

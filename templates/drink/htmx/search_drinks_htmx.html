@@ -33,23 +33,6 @@
                 highlightStars(ratingValue.value - 1);
         }
     </script>
-    <style>    
-        .star-rating {
-            display: flex;
-            flex-direction: row;
-        }
-        
-        .star {
-            font-size: 1.5em; /* Make the stars smaller */
-            color: #ccc;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-        
-        .star.checked {
-            color: #ffbd00;
-        }
-    </style> 
     <div class="row m-2">
         <form class="form-inline" method="#" id="search-drinks-form"
             hx-get="{%url 'search-drinks'%}" hx-target="#search-drinks-content"
@@ -62,14 +45,20 @@
             <div class="row mt-3">
                 <!-- Filters -->
                 <div class="col-auto" id="filters-panel">
-                    <h5>Filters</h5>
-                    <button type="button" class="btn btn-danger"
-                    onclick="$('#filters-panel input, #search-bar').val(''); $('.checked').removeClass('checked');  $('#filters-panel select').val('').trigger('change'); $('#search-drinks-button').click()">Clear All</button>
+                    <div class="row">
+                        <div class="col-auto">
+                            <h5>Filters</h5>
+                        </div>
+                        <div class="col right">
+                            <button type="button" class="btn btn-danger btn-sm"
+                                onclick="$('#filters-panel input, #search-bar').val(''); $('.checked').removeClass('checked');  $('#filters-panel select').val('').trigger('change'); $('#search-drinks-button').click()">Clear All</button>
+                        </div>
+                    </div> 
                     <hr>
                     <label for="drink_brands" style="width:100%">
-                        Drink Brand <br>change
+                        Drink Brand <br>
                         <div class="row">
-                            <div class="col p-0">
+                            <div class="col pr-0">
                                 <select style="width:100%" class="form-control select2" name="drink_brand" id="drink_brands" onchange="$('#search-drinks-button').click()">
                                     <option selected></option>
                                     {%for drink_brand in drink_brands%}
@@ -78,7 +67,7 @@
                                 </select>
                             </div>
                             <div class="col-auto">
-                                <button type="button" class="btn btn-secondary"
+                                <button type="button" class="btn btn-secondary btn-sm"
                                 onclick="$('#drink_brands').val('').trigger('change');">Clear</button>
                             </div>
                         </div>
@@ -87,7 +76,7 @@
 
                     <div class="mb-3" id="taste-panel">
                         <label for="title" class="form-label mb-0">Taste</label>                
-                        <div class="star-rating">
+                        <div class="star-rating" style="font-size: 10px">
                             <span class="star" data-rating="1"><i class="fas fa-star"></i></span>
                             <span class="star" data-rating="2"><i class="fas fa-star"></i></span>
                             <span class="star" data-rating="3"><i class="fas fa-star"></i></span>
@@ -105,7 +94,7 @@
 
                     <div class="mb-3" id="aftertaste-panel">
                         <label for="title" class="form-label mb-0">Aftertaste</label>                
-                        <div class="star-rating">
+                        <div class="star-rating" style="font-size: 10px">
                             <span class="star" data-rating="1"><i class="fas fa-star"></i></span>
                             <span class="star" data-rating="2"><i class="fas fa-star"></i></span>
                             <span class="star" data-rating="3"><i class="fas fa-star"></i></span>
@@ -122,15 +111,15 @@
                 </div>
                 
                 <div class="col">
-                    <div class="row mt-3">
-                        <div class="col mr-1 p-0">
-                            <input class="form-control mr-sm-2" name="search" type="search" placeholder="Search for drinks..." aria-label="Search" id="search-bar">
+                    <div class="row m-0 mt-3">
+                        <div class="col mr-1 pr-0">
+                            <input class="form-control form-control-sm" name="search" type="search" placeholder="Search for drinks..." aria-label="Search" id="search-bar">
                         </div>
                         <div class="col-auto ms-1 p-0">
-                            <button form="search-drinks-form" class="btn btn-outline-success my-2 my-sm-0" type="submit" id="search-drinks-button">Search</button>
+                            <button form="search-drinks-form" class="btn btn-outline-success my-2 my-sm-0 btn-sm" type="submit" id="search-drinks-button">Search</button>
                         </div>
                         <div class="col-auto">
-                            <select class="form-control" name="sort" onchange="$('#search-drinks-button').click()">
+                            <select class="form-control form-control-sm" name="sort" onchange="$('#search-drinks-button').click()">
                                 <option value="" disabled selected>Sort By...</option>
                                 <option value="caffeine_per_hundred_ml">Caffeine (mg/100ml) - ↑</option>
                                 <option value="-caffeine_per_hundred_ml">Caffeine (mg/100ml) - ↓</option>
@@ -148,19 +137,20 @@
                         </div>
                         <div class="col-auto">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="view" id="view1" value="gallery" checked>
+                                <input class="form-check-input" type="radio" name="view" id="view1" value="gallery" checked onchange="$('#search-drinks-button').click()">
                                 <label class="form-check-label" for="view1">
                                 Gallery
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="view" id="view2" value="list">
+                                <input class="form-check-input" type="radio" name="view" id="view2" value="list" onchange="$('#search-drinks-button').click()">
                                 <label class="form-check-label" for="view2">
                                 List
                                 </label>
                             </div>
                         </div>
                     </div>
+                    <hr class="m-0 mt-2">
                     <div class="row mt-3" id="search-drinks-content">
                         {% comment %} {%if view == 'list'%}
                         {% include 'drink/htmx/search_drinks_list_htmx.html'%}

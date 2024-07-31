@@ -21,6 +21,9 @@
         <script src="{% static 'js/fontawesome.js' %}"></script>
 
         <style>
+            html {
+                font-size: 14px
+            }
             .left {
                 text-align: left;
             }
@@ -55,6 +58,25 @@
             .yellow-star {
                 color: #ffbd00;
             }
+            .select2-styling {
+                height:28px;
+                font-size:10px;
+            }
+        .star-rating {
+            display: flex;
+            flex-direction: row;
+        }
+        
+        .star {
+            font-size: 1.5em; /* Make the stars smaller */
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .star.checked {
+            color: #ffbd00;
+        }
         </style>
         <script>                 
             $(document).ready(function() {

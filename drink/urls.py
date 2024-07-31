@@ -15,4 +15,9 @@ urlpatterns = [
         drinkviews.ReviewDrinkView.as_view(),
         name="review-drink",
     ),
+    path(
+        "reviews/<int:pk>/",
+        drinkviews.ReviewsView.as_view(),
+        name="reviews",
+    ),
 ]

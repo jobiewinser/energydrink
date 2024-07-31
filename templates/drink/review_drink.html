@@ -32,23 +32,6 @@
             highlightStars(ratingValue.value - 1);
     }
 </script>
-<style>    
-    .star-rating {
-        display: flex;
-        flex-direction: row;
-    }
-    
-    .star {
-        font-size: 1.5em; /* Make the stars smaller */
-        color: #ccc;
-        cursor: pointer;
-        transition: color 0.3s;
-    }
-    
-    .star.checked {
-        color: #ffbd00;
-    }
-</style>
 <div class="row mt-3">
     <div class="col">
     </div>
@@ -151,14 +134,33 @@
                     </form>
                 </div>
                 <div class="col-auto">
-                    <div class="card pointer" onclick="window.location.replace('{%url 'view-drink' pk=drink.pk%}')">
+                    <div class="card pointer">
                         <div class="center">
-                            <img src="{{ drink.image.url }}" class="card-img-top" alt="{{ drink.name }}" style="padding:6px; max-width:200px; max-height:200px; width: auto; height: auto;">
+                            <img src="{{ drink.image.url }}" class="card-img-top" alt="{{ drink.name }}" style="padding:6px; max-width:180px; max-height:180px; width: auto; height: auto;">
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">{{ drink.name }}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">{{ drink.drink_brand.name }}</h6>
-                            <p class="card-text">Caffeine: {{ drink.caffeine_per_hundred_ml }}<span class="text-black-50" style="font-size:12px">mg/100ml</span></p>
+                            <div class="row m-0">
+                                <div class="col p-0">
+                                </div>
+                                <div class="col-auto">
+                                    <div class="row m-0">
+                                        <div class="col center">
+                                            <h5 class="card-title">{{ drink.name }}</h5>
+                                            <h6 class="card-subtitle mb-2 text-muted">{{ drink.drink_brand.name }}</h6>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="col p-0 pr-1 right nowrap">
+                                            <p class="card-text mb-0" style="font-size:13px">{%if drink.caffeine_per_hundred_ml is not None%}{{ drink.caffeine_per_hundred_ml }}{%else%}?{%endif%} <span class="text-black-50" style="font-size:12px">mg/100ml</span></p>
+                                        </div>
+                                        <div class="col p-0 pl-1 nowrap">
+                                            <a href="{%url 'reviews' pk=drink.pk%}" class="nowrap">{{drink.review_drink.count}} Review{%if not drink.review_drink.count == 1%}s{%endif%}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col p-0">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
