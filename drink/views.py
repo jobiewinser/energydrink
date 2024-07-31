@@ -64,9 +64,14 @@ class ReviewDrinkView(TemplateView):
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context["drink"] = drinkmodels.Drink.objects.get(pk=kwargs["pk"])
+        drink = drinkmodels.Drink.objects.get(pk=kwargs["pk"])
+        context["drink"] = drink
         context["countries"] = dict(countries)
         context["currencies"] = coremodels.CURRENCY_CHOICES
+        context["review"] = drinkmodels.Review.objects.filter(
+            submitted_by=self.request.user,
+            drink=drink,
+        ).first()
         return context
 
     def post(self, request, *args, **kwargs):
@@ -85,18 +90,21 @@ class ReviewDrinkView(TemplateView):
         currency = request.POST["currency"] or None
         currency = request.POST["currency"] or None
         image = request.FILES.get("image") or None
-        drinkmodels.Review.objects.create(
+        
+        review, created = drinkmodels.Review.objects.get_or_create(
             submitted_by=request.user,
-            taste=taste,
-            aftertaste=aftertaste,
-            title=title,
-            description=description,
             drink=drink,
-            image=image,
-            country_purchased=country_purchased,
-            price_paid=price_paid,
-            currency=currency,
         )
+        
+        review.taste=taste
+        review.aftertaste=aftertaste
+        review.title=title
+        review.description=description
+        review.image=image
+        review.country_purchased=country_purchased
+        review.price_paid=price_paid
+        review.currency=currency
+        review.save()
         response = HttpResponse(status=200)
         response["HX-Redirect"] = f"/search-drinks/"
         return response

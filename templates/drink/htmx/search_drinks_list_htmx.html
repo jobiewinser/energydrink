@@ -2,7 +2,7 @@
 <div>
     {% for drink in drinks %}
     <div class="row border my-1 pointer" onclick="window.location.replace('{%url 'view-drink' pk=drink.pk%}')">
-        <div class="col-auto pl-1" style="width:110px">
+        <div class="col-auto ps-1" style="width:110px">
             <div class="" style="height:110px">
                 <div class="center">
                     {%if drink.image%}
@@ -11,7 +11,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-auto pr-1">
+        <div class="col-auto pe-1">
             <div class="" style="height:110px">
                 <div class="card-body">
                     <h5 class="card-title">{{ drink.name }}</h5>
@@ -29,7 +29,7 @@
                     <a href="{%url 'reviews' pk=drink.pk%}" class="nowrap">{{drink.review_drink.count}} Review{%if not drink.review_drink.count == 1%}s{%endif%}</a>
                     <div class="taste-rating">
                         <div class="row m-0 nowrap">
-                            <div class="col-auto nowrap pt-2 pr-2 pl-0" style="font-size:8px">
+                            <div class="col-auto nowrap pt-2 pe-2 ps-0" style="font-size:8px">
                                 {% for star in 0|range_tag:drink.average_taste %}
                                 <i class="fas fa-star yellow-star"></i>
                                 {% endfor %}
@@ -37,14 +37,14 @@
                                 <i class="fas fa-star grey-star"></i>
                                 {% endfor %}
                             </div>
-                            <div class="col pl-0">
+                            <div class="col ps-0">
                                 <span class="card-text" style="font-size:13px">Taste</span>
                             </div>
                         </div>
                     </div>
                     <div class="aftertaste-rating">
                         <div class="row m-0 nowrap">
-                            <div class="col-auto nowrap pt-2 pr-2 pl-0" style="font-size:8px">
+                            <div class="col-auto nowrap pt-2 pe-2 ps-0" style="font-size:8px">
                                 {% for star in 0|range_tag:drink.average_aftertaste %}
                                 <i class="fas fa-star yellow-star"></i>
                                 {% endfor %}
@@ -52,7 +52,7 @@
                                 <i class="fas fa-star grey-star"></i>
                                 {% endfor %}
                             </div>
-                            <div class="col pl-0">
+                            <div class="col ps-0">
                                 <span class="card-text" style="font-size:13px">Aftertaste</span>
                             </div>
                         </div>

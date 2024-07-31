@@ -62,7 +62,7 @@
                                 <span class="star" data-rating="9"><i class="fas fa-star"></i></span>
                                 <span class="star" data-rating="10"><i class="fas fa-star"></i></span>
                             </div>
-                            <input type="hidden" id="taste-value" name="taste" value="">
+                            <input type="hidden" id="taste-value" name="taste" {%if review%}value="{{review.taste}}"{%endif%}>
                             <div id="description_help" class="form-text">How good is the taste of the drink.</div>
                         </div>
 
@@ -80,10 +80,10 @@
                                 <span class="star" data-rating="9"><i class="fas fa-star"></i></span>
                                 <span class="star" data-rating="10"><i class="fas fa-star"></i></span>
                             </div>
-                            <input type="hidden" id="aftertaste-value" name="aftertaste" value="">
+                            <input type="hidden" id="aftertaste-value" name="aftertaste" {%if review%}value="{{review.aftertaste}}"{%endif%}>
                             <div id="description_help" class="form-text">How good is the aftertaste of the drink.</div>
                         </div>
-
+                        
                         <p>
                             <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-review-panel" aria-expanded="false" aria-controls="advanced-review-panel">
                             Tell us more
@@ -93,25 +93,31 @@
                         <div class="collapse" id="advanced-review-panel">
                             <div class="mb-3">
                                 <label for="title" class="form-label">Review Title <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
-                                <input type="text" class="form-control" id="title" name="title" aria-describedby="title">
+                                <input type="text" class="form-control" id="title" name="title" aria-describedby="title" {%if review%}value="{{review.title}}"{%endif%}>
                             </div>
                             <div class="mb-3">
                                 <label for="description" class="form-label">Description <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
-                                <input type="text" class="form-control" id="description" name="description" aria-describedby="description">
+                                <textarea type="text" class="form-control" id="description" name="description" aria-describedby="description">{%if review.description%}{{review.description}}{%endif%}</textarea>
                                 <div id="description_help" class="form-text">Describe how the drinks tastes.</div>
                             </div>
                             <div class="mb-3 row">
                                 <div class="col-auto">
                                     <label for="currency" class="form-label">Currency <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
-                                    <select class="select2 form-control" name="currency" id="currency" aria-describedby="brandHelp">
-                                        {% for currency in currencies %}
-                                        <option value="{{ currency.0 }}">{{ currency.1 }}</option>
-                                        {% endfor %}
+                                    <select class="select2 form-control" name="currency" id="currency" aria-describedby="currency">
+                                        {%if review%}
+                                            {% for currency in currencies %}
+                                            <option value="{{ currency.0 }}" {% if review.currency == currency.0 %}selected{% endif %}>{{ currency.1 }}</option>
+                                            {% endfor %}
+                                        {% else %}
+                                            {% for currency in currencies %}
+                                            <option value="{{ currency.0 }}" {% if request.user.profile.currency == currency.0 %}selected{% endif %}>{{ currency.1 }}</option>
+                                            {% endfor %}
+                                        {% endif %}
                                     </select>
                                 </div>
                                 <div class="col" style="min-width:200px">
                                     <label for="price_paid" class="form-label">Price Paid <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
-                                    <input type="number" class="form-control" id="price_paid" name="price_paid" aria-describedby="price_paid" min="1" step="any" />
+                                    <input type="number" class="form-control" id="price_paid" name="price_paid" aria-describedby="price_paid" min="0" step="0.01"  {%if review%}value="{{review.price_paid}}"{%endif%}/>
                                     <div id="price_paid_help" class="form-text">How much did you pay for the drink.</div>
                                 </div>
                             </div>
@@ -121,10 +127,16 @@
                             </div>
                             <div class="mb-3">
                                 <label for="drink_name" class="form-label">Country Purchased <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
-                                <select class="select2 form-control" name="country_purchased" id="country_purchased" aria-describedby="brandHelp">
-                                    {% for country_code, country in countries.items %}
-                                    <option value="{{ country_code }}">{{ country }}</option>
-                                    {% endfor %}
+                                <select class="select2 form-control" name="country_purchased" id="country_purchased" aria-describedby="country">
+                                    {%if review%}
+                                        {% for country_code, country in countries.items %}
+                                        <option value="{{ country_code }}" {% if review.country_purchased == country_code %}selected{% endif %}>{{ country }}</option>
+                                        {% endfor %}
+                                    {% else %}
+                                        {% for country_code, country in countries.items %}
+                                        <option value="{{ country_code }}" {% if request.user.profile.country == country_code %}selected{% endif %}>{{ country }}</option>
+                                        {% endfor %}
+                                    {% endif %}
                                 </select>
                             </div>
                         </div>
@@ -152,10 +164,10 @@
                                         </div>
                                     </div>
                                     <div class="row m-0">
-                                        <div class="col p-0 pr-1 right nowrap">
+                                        <div class="col p-0 pe-1 right nowrap">
                                             <p class="card-text mb-0" style="font-size:13px">{%if drink.caffeine_per_hundred_ml is not None%}{{ drink.caffeine_per_hundred_ml }}{%else%}?{%endif%} <span class="text-black-50" style="font-size:12px">mg/100ml</span></p>
                                         </div>
-                                        <div class="col p-0 pl-1 nowrap">
+                                        <div class="col p-0 ps-1 nowrap">
                                             <a href="{%url 'reviews' pk=drink.pk%}" class="nowrap">{{drink.review_drink.count}} Review{%if not drink.review_drink.count == 1%}s{%endif%}</a>
                                         </div>
                                     </div>
