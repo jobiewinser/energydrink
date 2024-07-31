@@ -1,0 +1,79 @@
+{%extends 'base.html'%}
+{% block content %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        setupStars('taste');
+        setupStars('aftertaste');
+    });
+    function setupStars(key) {
+            const stars = document.querySelectorAll('#'+key+'-panel .star');
+            const ratingValue = document.getElementById(key+'-value');
+        
+            stars.forEach((star, index) => {
+                star.addEventListener('click', () => {
+                    ratingValue.value = index + 1;
+                    highlightStars(index);
+                });
+                star.addEventListener('mouseover', () => {
+                    highlightStars(index);
+                });
+                star.addEventListener('mouseleave', () => {
+                    highlightStars(ratingValue.value - 1);
+                });
+            });
+        
+            function highlightStars(index) {
+                stars.forEach((star, i) => {
+                    star.classList.toggle('checked', i <= index);
+                });
+            }
+        
+            // Initialize with no stars highlighted
+            highlightStars(ratingValue.value - 1);
+    }
+</script>
+<div class="row mt-3">
+    <div class="col">
+    </div>
+    <div class="col-auto">
+        <div class="card p-3">
+            <div class="row">
+                <div class="col">
+                    <form id="review_form"
+                        autocomplete="off" autofill="off" method="POST">
+                        <h5>Edit Profile</h5>
+                        <hr>
+                        <div class="mb-2">
+                            <label for="title" class="form-label">Display Name</span></label>
+                            <input type="text" class="form-control" id="display_name" name="display_name" aria-describedby="display_name" value="{{profile.display_name}}">
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="drink_name" class="form-label">Country of Residence</label>
+                            <select class="select2 form-control" name="country" id="country" aria-describedby="country">
+                                {% for country_code, country in countries.items %}
+                                <option value="{{ country_code }}" {% if profile.country == country_code %}selected{% endif %}>{{ country }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-5">
+                            <label for="currency" class="form-label">Default Currency</span></label>
+                            <select class="select2 form-control" name="currency" id="currency" aria-describedby="currency">
+                                {% for currency in currencies %}
+                                <option value="{{ currency.0 }}" {% if profile.currency == currency.0 %}selected{% endif %}>{{ currency.1 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+    </div>
+</div>
+{% endblock %}

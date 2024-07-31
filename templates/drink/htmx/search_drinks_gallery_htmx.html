@@ -2,15 +2,17 @@
 <div class="row m-0">
     {% for drink in drinks %}
     <div class="col-auto mb-3">
-        <div class="card pointer" onclick="window.location.replace('{%url 'view-drink' pk=drink.pk%}')">
+        <div class="card pointer" onclick="window.location.replace('{%url 'view-drink' pk=drink.pk%}')" style="height:320px; width:230px;">
             <div class="center">
+                {%if drink.image%}
                 <img src="{{ drink.image.url }}" class="card-img-top" alt="{{ drink.name }}" style="padding:6px; max-width:180px; max-height:180px; width: auto; height: auto;">
+                {%endif%}
             </div>
             <div class="card-body">
                 <div class="row m-0">
                     <div class="col p-0">
                     </div>
-                    <div class="col-auto">
+                    <div class="col-auto p-0">
                         <div class="row m-0">
                             <div class="col center">
                                 <h5 class="card-title">{{ drink.name }}</h5>
@@ -25,7 +27,7 @@
                                 <a href="{%url 'reviews' pk=drink.pk%}" class="nowrap">{{drink.review_drink.count}} Review{%if not drink.review_drink.count == 1%}s{%endif%}</a>
                             </div>
                         </div>
-                        {%if drink.average_taste and drink.average_aftertaste%}
+                        {%if drink.review_drink.exists%}
                         <div class="taste-rating">
                             <div class="row m-0">
                                 <div class="col-auto nowrap pt-2 pr-2 pl-0" style="font-size:8px">
@@ -57,7 +59,9 @@
                             </div>
                         </div>
                         {%else%}
-                        <a href="{%url 'review-drink' pk=drink.pk%}" class="nowrap">Be the first to review!</a>
+                        <div class="center mt-2">
+                            <a href="{%url 'review-drink' pk=drink.pk%}" class="nowrap">Be the first to review!</a>
+                        </div>
                         {%endif%}
                     </div>
                     <div class="col p-0">

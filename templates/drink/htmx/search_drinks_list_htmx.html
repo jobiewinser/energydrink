@@ -5,7 +5,9 @@
         <div class="col-auto pl-1" style="width:110px">
             <div class="" style="height:110px">
                 <div class="center">
+                    {%if drink.image%}
                     <img src="{{ drink.image.url }}" class="card-img-top" alt="{{ drink.name }}" style="padding:6px; max-width:100px; max-height:100px; width: auto; height: auto;">
+                    {%endif%}
                 </div>
             </div>
         </div>
@@ -23,7 +25,7 @@
         <div class="col-auto">
             <div class="" style="height:110px">
                 <div class="card-body">
-                    {%if drink.average_taste and drink.average_aftertaste%}
+                    {%if drink.review_drink.exists%}
                     <a href="{%url 'reviews' pk=drink.pk%}" class="nowrap">{{drink.review_drink.count}} Review{%if not drink.review_drink.count == 1%}s{%endif%}</a>
                     <div class="taste-rating">
                         <div class="row m-0 nowrap">
@@ -56,7 +58,9 @@
                         </div>
                     </div>
                     {%else%}
-                    <a href="{%url 'review-drink' pk=drink.pk%}" class="nowrap">Be the first to review!</a>
+                    <div class="center mt-2">
+                        <a href="{%url 'review-drink' pk=drink.pk%}" class="nowrap">Be the first to review!</a>
+                    </div>
                     {%endif%}
                 </div>
             </div>

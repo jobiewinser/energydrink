@@ -136,7 +136,9 @@
                 <div class="col-auto">
                     <div class="card pointer">
                         <div class="center">
+                            {%if drink.image%}
                             <img src="{{ drink.image.url }}" class="card-img-top" alt="{{ drink.name }}" style="padding:6px; max-width:180px; max-height:180px; width: auto; height: auto;">
+                            {%endif%}
                         </div>
                         <div class="card-body">
                             <div class="row m-0">

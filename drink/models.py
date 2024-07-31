@@ -69,6 +69,7 @@ class Drink(models.Model):
         null=True,
         blank=True,
     )
+
     def save(
         self,
         force_insert=False,
