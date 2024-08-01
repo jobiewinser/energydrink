@@ -45,7 +45,8 @@ class SubmitDrinkView(TemplateView):
             drink = drinkmodels.Drink(
                 name=name,
                 drink_brand=drinkmodels.DrinkBrand.objects.get(pk=drink_brand_id),
-                approved=False,
+                # approved=False, this will be false when going live
+                approved=True,
                 submitted_by=request.user,
             )
             image = request.FILES.get("image")

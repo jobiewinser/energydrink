@@ -15,7 +15,8 @@ def submit_drink_brand(request):
         if not drink_brand:
             drink_brand = drinkmodels.DrinkBrand.objects.create(
                 name=name,
-                approved=False,
+                # approved=False, this will be false when going live
+                approved=True,
                 submitted_by=request.user,
             )
         context = {

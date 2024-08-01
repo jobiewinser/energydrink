@@ -6,14 +6,16 @@
     <div class="col mt-5">
         <form method="POST">
             <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" name="username" aria-describedby="username">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" class="form-control" id="email" name="email" aria-describedby="email">
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" id="password" name="password" aria-describedby="password">
             </div>
             <button type="submit" class="form-control btn-success">Login</button>
+            <br>
+            <a href="{%url 'register'%}">Register</a>
             {% csrf_token %}
         </form>
     </div>

@@ -1,0 +1,33 @@
+{%extends 'base.html'%}
+{% block content %}
+<div class="row">
+    <div class="col">
+    </div>
+    <div class="col mt-5">
+        <form
+            autocomplete="off" autofill="off"
+            hx-encoding="multipart/form-data" hx-trigger="submit"
+            hx-post="{% url 'register' %}"
+            hx-indicator="#page_load_indicator"
+            hx-swap="none"
+            hx-push-url="true">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" aria-describedby="email">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" aria-describedby="password">
+            </div>
+            <div class="mb-3">
+                <label for="password_confirm" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="password_confirm" name="password_confirm" aria-describedby="password_confirm">
+            </div>
+            <button type="submit" class="form-control btn-success">Register</button>
+            {% csrf_token %}
+        </form>
+    </div>
+    <div class="col">
+    </div>
+</div>
+{% endblock %}

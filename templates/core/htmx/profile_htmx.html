@@ -1,0 +1,61 @@
+
+<span>
+    <div class="row mt-3">
+        <div class="col">
+        </div>
+        <div class="col-auto">
+            <div class="card p-3">
+                <div class="row">
+                    <div class="col">
+                        <form id="review_form"
+                            autocomplete="off" autofill="off"
+                            hx-encoding="multipart/form-data"
+                            hx-trigger="submit"
+                            hx-post="{% url 'profile'%}" 
+                            hx-target="#content"
+                            hx-swap="innerHTML"
+                            hx-indicator="#page_load_indicator"
+                            >
+                            <h5>Edit Profile</h5>
+                            <hr>
+                            <div class="mb-2">
+                                <label for="title" class="form-label">Display Name</span></label>
+                                <input type="text" class="form-control" id="display_name" name="display_name" aria-describedby="display_name" value="{{profile.display_name}}">
+                            </div>
+
+                            <div class="mb-2">
+                                <label for="drink_name" class="form-label">Country of Residence</label>
+                                <select class="select2 form-control" name="country" id="country" aria-describedby="country">
+                                    {% for country_code, country in countries.items %}
+                                    <option value="{{ country_code }}" {% if profile.country == country_code %}selected{% endif %}>{{ country }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="currency" class="form-label">Default Currency</span></label>
+                                <select class="select2 form-control" name="currency" id="currency" aria-describedby="currency">
+                                    {% for currency in currencies %}
+                                    <option value="{{ currency.0 }}" {% if profile.currency == currency.0 %}selected{% endif %}>{{ currency.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            {% csrf_token %}
+                            <div class="center">
+                                <div class=" mb-2" style="height:22px">
+                                    <span class="text-success">
+                                        {%if show_saved%}Saved!{%endif%}
+                                    </span>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+        </div>
+    </div>
+</span>
