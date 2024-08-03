@@ -5,14 +5,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 from dotenv import load_dotenv
 
-env_path = Path("/var/www/energydrinkrepo/.env")
+env_path = Path("/var/www/energydrink/.env")
 load_dotenv(dotenv_path=env_path)
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = bool(os.getenv("ENVIRONMENT") == "development")
 
 ALLOWED_HOSTS = ["*"] if DEBUG else [os.getenv("ALLOWED_HOSTS")]
-
+ALLOWED_HOSTS = ["*"]
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
