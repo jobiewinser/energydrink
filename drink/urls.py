@@ -7,6 +7,7 @@ urlpatterns = [
     path(
         "submit-drink-brand/", drinkhtmx.submit_drink_brand, name="submit-drink-brand"
     ),
+    path("edit-drink/<int:pk>/", drinkviews.EditDrinkView.as_view(), name="edit-drink"),
     path("submit-drink/", drinkviews.SubmitDrinkView.as_view(), name="submit-drink"),
     path("search-drinks/", drinkviews.SearchDrinksView.as_view(), name="search-drinks"),
     path("view-drink/<int:pk>/", drinkviews.ViewDrinkView.as_view(), name="view-drink"),

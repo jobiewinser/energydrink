@@ -20,7 +20,7 @@ class ReleasesView(TemplateView):
 
 @method_decorator(login_required, name="dispatch")
 class SubmitDrinkView(TemplateView):
-    template_name = "drink/submit_drink.html"
+    template_name = "drink/edit_drink.html"
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -48,11 +48,54 @@ class SubmitDrinkView(TemplateView):
                 # approved=False, this will be false when going live
                 approved=True,
                 submitted_by=request.user,
+                caffeine_per_hundred_ml=request.POST.get("caffeine_per_hundred_ml"),
             )
             image = request.FILES.get("image")
             if image:
                 drink.image = image
             drink.save()
+        context = {
+            "drink": drink,
+        }
+        return render(request, f"drink/htmx/view_drink_htmx.html", context)
+
+
+@method_decorator(login_required, name="dispatch")
+class EditDrinkView(TemplateView):
+    template_name = "drink/edit_drink.html"
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["brands"] = drinkmodels.DrinkBrand.objects.filter(
+            Q(approved=True) | Q(submitted_by=self.request.user)
+        )
+        context["drink"] = drinkmodels.Drink.objects.get(pk=kwargs["pk"])
+        return context
+
+    def post(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            drink = drinkmodels.Drink.objects.get(
+                pk=kwargs["pk"],
+            )
+
+        drink = drinkmodels.Drink.objects.get(
+            Q(approved=True) | Q(submitted_by=request.user),
+            pk=kwargs["pk"],
+        )
+        name = request.POST.get("drink_name")
+        if not name:
+            return HttpResponse("Please enter a valid Drink Name", status=400)
+        drink_brand_id = request.POST.get("drink_brand")
+        if not drink_brand_id:
+            return HttpResponse("Please select a valid Brand", status=400)
+
+        drink.name = name
+        drink.drink_brand = drinkmodels.DrinkBrand.objects.get(pk=drink_brand_id)
+        image = request.FILES.get("image")
+        if image:
+            drink.image = request.FILES.get("image")
+        drink.caffeine_per_hundred_ml = request.POST.get("caffeine_per_hundred_ml")
+        drink.save()
         context = {
             "drink": drink,
         }
