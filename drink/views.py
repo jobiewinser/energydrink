@@ -91,20 +91,20 @@ class ReviewDrinkView(TemplateView):
         currency = request.POST["currency"] or None
         currency = request.POST["currency"] or None
         image = request.FILES.get("image") or None
-        
+
         review, created = drinkmodels.Review.objects.get_or_create(
             submitted_by=request.user,
             drink=drink,
         )
-        
-        review.taste=taste
-        review.aftertaste=aftertaste
-        review.title=title
-        review.description=description
-        review.image=image
-        review.country_purchased=country_purchased
-        review.price_paid=price_paid
-        review.currency=currency
+
+        review.taste = taste
+        review.aftertaste = aftertaste
+        review.title = title
+        review.description = description
+        review.image = image
+        review.country_purchased = country_purchased
+        review.price_paid = price_paid
+        review.currency = currency
         review.save()
         response = HttpResponse(status=200)
         response["HX-Redirect"] = f"/search-drinks/"

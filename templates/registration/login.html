@@ -4,7 +4,13 @@
     <div class="col">
     </div>
     <div class="col mt-5">
-        <form method="POST">
+        <form 
+            autocomplete="off" autofill="off"
+            hx-encoding="multipart/form-data" hx-trigger="submit"
+            hx-post="{% url 'login' %}"
+            hx-indicator="#page_load_indicator"
+            hx-swap="none"
+            hx-push-url="true">
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input type="text" class="form-control" id="email" name="email" aria-describedby="email">

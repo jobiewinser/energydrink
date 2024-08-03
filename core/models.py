@@ -197,9 +197,7 @@ class Profile(models.Model):
     #     blank=True,
     # )
     display_name = models.TextField(blank=True, null=True)
-    country = CountryField(
-        blank_label="(select country)", blank=True, null=True
-    )
+    country = CountryField(blank_label="(select country)", blank=True, null=True)
     currency = models.CharField(choices=PROFILE_CURRENCY_CHOICES, blank=True, null=True)
 
 
