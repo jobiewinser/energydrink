@@ -19,3 +19,9 @@ def range_tag(range_lower, range_upper):
             result = range(range_lower, range_upper)
             return result
     return []
+
+
+
+@register.filter
+def round_tag(number, digits):
+    return round(number, digits)

@@ -38,9 +38,8 @@
                 white-space: nowrap;
             }
             .htmx-indicator {
-                visibility: hidden;
                 opacity: 0;
-                transition: opacity 500ms ease-in;
+                transition: opacity 250ms ease-in;
             }
             #page_load_indicator {
                 height: 20%;
@@ -162,11 +161,11 @@
                 {%if request.user.is_authenticated%} 
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'submit-drink' %}">Submit a Drink</a>
+                        <li class="nav-item mx-3">
+                            <a class="nav-link" href="{% url 'search-drinks' %}">Search for Drinks</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'search-drinks' %}">Search for Drinks</a>
+                            <a class="nav-link" href="{% url 'submit-drink' %}">Submit a Drink</a>
                         </li>
                         
                     </ul>

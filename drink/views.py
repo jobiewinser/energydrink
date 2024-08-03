@@ -208,9 +208,6 @@ class SearchDrinksView(TemplateView):
         context["drinks"] = drinks
         return context
 
-    def post(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
-
 
 @method_decorator(login_required, name="dispatch")
 class ViewDrinkView(TemplateView):

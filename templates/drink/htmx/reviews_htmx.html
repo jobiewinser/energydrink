@@ -55,7 +55,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ drink.name }}</h5>
                             <h6 class="card-subtitle mb-2 text-muted">{{ drink.drink_brand.name }}</h6>
-                            <p class="card-text mb-0" style="font-size:13px">{%if drink.caffeine_per_hundred_ml is not None%}{{ drink.caffeine_per_hundred_ml }}{%else%}?{%endif%} <span class="text-black-50" style="font-size:12px">mg/100ml</span></p>
+                            <p class="card-text mb-0" style="font-size:13px">{%if drink.caffeine_per_hundred_ml is not None%}{{ drink.caffeine_per_hundred_ml|round_tag:0 }}{%else%}?{%endif%} <span class="text-black-50" style="font-size:12px">mg/100ml</span></p>
                         </div>
                     </div>
                 </div>
