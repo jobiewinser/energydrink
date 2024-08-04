@@ -11,6 +11,7 @@ import core.models as coremodels
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
+from django.db.models import Q
 
 
 class HomeView(TemplateView):
@@ -89,7 +90,7 @@ class LoginView(TemplateView):
     def post(self, request, *args, **kwargs):
         email = request.POST["email"]
         password = request.POST["password"]
-        user = User.objects.filter(email=email).first()
+        user = User.objects.filter(Q(email=email) | Q(username=email)).first()
         if user and user.check_password(password):
             login(request, user)
             response = HttpResponse(status=200)

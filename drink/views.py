@@ -122,16 +122,13 @@ class ReviewDrinkView(TemplateView):
         taste = request.POST["taste"]
         if not taste:
             return HttpResponse("Please rate the Taste", status=400)
-        aftertaste = request.POST["aftertaste"]
-        if not aftertaste:
-            return HttpResponse("Please rate the Aftertaste", status=400)
         pk = kwargs["pk"]
         drink = drinkmodels.Drink.objects.get(pk=pk)
+        aftertaste = request.POST["aftertaste"] or None
         title = request.POST["title"] or None
         description = request.POST["description"] or None
         country_purchased = request.POST["country_purchased"] or None
         price_paid = request.POST["price_paid"] or None
-        currency = request.POST["currency"] or None
         currency = request.POST["currency"] or None
         image = request.FILES.get("image") or None
 
@@ -170,7 +167,7 @@ class SearchDrinksView(TemplateView):
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         if self.request.META.get("HTTP_HX_REQUEST", "false") == "true":
-            view = self.request.GET.get("view", "gallery")
+            view = self.request.GET.get("view") or "list"
             self.template_name = f"drink/htmx/search_drinks_{view}_htmx.html"
         context = super().get_context_data(**kwargs)
         context["unapproved_drinks"] = drinkmodels.Drink.objects.filter(
@@ -183,6 +180,7 @@ class SearchDrinksView(TemplateView):
         context["drink_brands"] = drinkmodels.DrinkBrand.objects.all()
         taste = self.request.GET.get("taste")
         aftertaste = self.request.GET.get("aftertaste")
+        caffeine_per_hundred_ml = self.request.GET.get("caffeine_per_hundred_ml")
         sort = self.request.GET.get("sort")
         drink_brand = self.request.GET.get("drink_brand")
         search = self.request.GET.get("search")
@@ -190,6 +188,8 @@ class SearchDrinksView(TemplateView):
             drinks = drinks.filter(average_taste__gte=taste)
         if aftertaste:
             drinks = drinks.filter(average_aftertaste__gte=aftertaste)
+        if caffeine_per_hundred_ml:
+            drinks = drinks.filter(caffeine_per_hundred_ml__gte=caffeine_per_hundred_ml)
         if sort:
             if "review_drink" in sort:
                 drinks = drinks.annotate(count=Count("review_drink"))

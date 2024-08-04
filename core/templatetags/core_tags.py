@@ -21,7 +21,11 @@ def range_tag(range_lower, range_upper):
     return []
 
 
-
 @register.filter
 def round_tag(number, digits):
     return round(number, digits)
+
+
+@register.filter
+def str_tag(var):
+    return str(var)

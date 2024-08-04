@@ -1,4 +1,4 @@
-
+{%load core_tags%}
 <span>   
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -33,6 +33,7 @@
                 highlightStars(ratingValue.value - 1);
         }
     </script>
+    
     <div class="row m-2">
         <form class="form-inline" method="#" id="search-drinks-form"
             hx-get="{%url 'search-drinks'%}" hx-target="#search-drinks-content"
@@ -41,17 +42,18 @@
             hx-push-url="true"
             hx-trigger="submit, load"
             >
+            <button hidden form="search-drinks-form" class="btn btn-outline-success my-2 my-sm-0 btn-sm" type="submit" id="search-drinks-button">Search</button>
             
             <div class="row mt-3">
                 <!-- Filters -->
-                <div class="col-auto" id="filters-panel">
+                <div class="col-12 col-md-auto filter-panel collapse" id="main-filter-panel">
                     <div class="row">
                         <div class="col-auto">
                             <h5>Filters</h5>
                         </div>
                         <div class="col right">
                             <button type="button" class="btn btn-danger btn-sm"
-                                onclick="$('#filters-panel input, #search-bar').val(''); $('.checked').removeClass('checked');  $('#filters-panel select').val('').trigger('change'); $('#search-drinks-button').click()">Clear All</button>
+                                onclick="$('.filter-panel input, #search-bar').val(''); $('.checked').removeClass('checked');  $('.filter-panel select').val('').trigger('change'); $('#search-drinks-button').click()">Clear All</button>
                         </div>
                     </div> 
                     <hr>
@@ -59,10 +61,10 @@
                         Drink Brand <br>
                         <div class="row">
                             <div class="col pe-0">
-                                <select style="width:100%" class="form-control select2 search-drinks-param" name="drink_brand" id="drink_brands" onchange="$('#search-drinks-button').click()">
+                                <select style="width:100%" class="form-control form-control-sm select2 search-drinks-param" name="drink_brand" id="drink_brands" onchange="$('#search-drinks-button').click()">
                                     <option selected></option>
-                                    {%for drink_brand in drink_brands%}
-                                    <option value="{{drink_brand.pk}}">{{drink_brand.name}}</option>
+                                    {%for drink_brand_ in drink_brands%}
+                                    <option value="{{drink_brand_.pk}}" {%if drink_brand_.pk|str_tag == request.GET.drink_brand|str_tag%}selected{%endif%}>{{drink_brand_.name}}</option>
                                     {%endfor%}
                                 </select>
                             </div>
@@ -88,7 +90,8 @@
                             <span class="star" data-rating="9"><i class="fas fa-star"></i></span>
                             <span class="star" data-rating="10"><i class="fas fa-star"></i></span>
                         </div>
-                        <input type="hidden" class="search-drinks-param" id="taste-value" name="taste" value="">
+                        <input type="hidden" class="search-drinks-param" id="taste-value" name="taste" 
+                                {%if request.GET.taste%}value="{{request.GET.taste}}"{%endif%}>
                     </div>
                     <hr>
 
@@ -106,53 +109,82 @@
                             <span class="star" data-rating="9"><i class="fas fa-star"></i></span>
                             <span class="star" data-rating="10"><i class="fas fa-star"></i></span>
                         </div>
-                        <input type="hidden" class="search-drinks-param" id="aftertaste-value" name="aftertaste" value="">
+                        <input type="hidden" class="search-drinks-param" id="aftertaste-value" name="aftertaste" 
+                        {%if request.GET.aftertaste%}value="{{request.GET.aftertaste}}"{%endif%}>
+                    </div>
+                    <hr>
+
+                    <div class="mb-3" id="caffeine-panel">
+                        <label for="title" class="form-label mb-0">Caffeine <span class="text-black-50" style="font-size:12px">mg/100ml</span></label>
+                        <input type="number" class="form-control form-control-sm search-drinks-param" id="caffeine-value" name="caffeine_per_hundred_ml" 
+                        {%if request.GET.caffeine_per_hundred_ml%}value="{{request.GET.caffeine_per_hundred_ml}}"{%endif%}
+                            oninput="$('#page_load_indicator').addClass('htmx-request')"
+                            hx-trigger="input delay:0.5s"
+                            hx-get="{%url 'search-drinks'%}" hx-target="#search-drinks-content"
+                            hx-swap="innerHTML"
+                            hx-indicator="#page_load_indicator"
+                            hx-push-url="true"
+                            hx-include=".search-drinks-param">
                     </div>
                 </div>
                 
                 <div class="col">
-                    <div class="row m-0 mt-3">
+                    <div class="row m-0 mt-3 filter-panel collapse show">
                         <div class="col mr-1 pe-0">
                             <input class="form-control form-control-sm" name="search" type="search" placeholder="Search for drinks..." aria-label="Search" id="search-bar"
+                                oninput="$('#page_load_indicator').addClass('htmx-request')"
+                                {%if request.GET.search%}value="{{request.GET.search}}"{%endif%}
                                 hx-trigger="input delay:0.5s"
                                 hx-get="{%url 'search-drinks'%}" hx-target="#search-drinks-content"
                                 hx-swap="innerHTML"
                                 hx-indicator="#page_load_indicator"
-                                hx-push-url="true">
+                                hx-push-url="true"
+                                hx-include=".search-drinks-param">
                         </div>
                         <div class="col-auto">
                             <select class="form-control form-control-sm search-drinks-param" name="sort" onchange="$('#search-drinks-button').click()">
                                 <option value="" disabled selected>Sort By...</option>
-                                <option value="caffeine_per_hundred_ml">Caffeine (mg/100ml) - ↑</option>
-                                <option value="-caffeine_per_hundred_ml">Caffeine (mg/100ml) - ↓</option>
-                                <option value="review_drink__count">Number of Reviews - ↑</option>
-                                <option value="-review_drink__count">Number of Reviews - ↓</option>
-                                <option value="average_taste">Average Taste - ↑</option>
-                                <option value="-average_taste">Average Taste - ↓</option>
-                                <option value="average_aftertaste">Average Aftertaste - ↑</option>
-                                <option value="-average_aftertaste">Average Aftertaste - ↓</option>
-                                <option value="name">Name - ↑</option>
-                                <option value="-name">Name - ↓</option>
-                                <option value="drink_brand__name">Brand Name - ↑</option>
-                                <option value="-drink_brand__name">Brand Name - ↓</option>
+                                <option {%if request.GET.sort == 'caffeine_per_hundred_ml'%}selected{%endif%} value="caffeine_per_hundred_ml">Caffeine (mg/100ml) - ↑</option>
+                                <option {%if request.GET.sort == '-caffeine_per_hundred_ml'%}selected{%endif%} value="-caffeine_per_hundred_ml">Caffeine (mg/100ml) - ↓</option>
+                                <option {%if request.GET.sort == 'review_drink__count'%}selected{%endif%} value="review_drink__count">Number of Reviews - ↑</option>
+                                <option {%if request.GET.sort == '-review_drink__count' or not request.GET.sort%}selected{%endif%} value="-review_drink__count">Number of Reviews - ↓</option>
+                                <option {%if request.GET.sort == 'average_taste'%}selected{%endif%} value="average_taste">Average Taste - ↑</option>
+                                <option {%if request.GET.sort == '-average_taste'%}selected{%endif%} value="-average_taste">Average Taste - ↓</option>
+                                <option {%if request.GET.sort == 'average_aftertaste'%}selected{%endif%} value="average_aftertaste">Average Aftertaste - ↑</option>
+                                <option {%if request.GET.sort == '-average_aftertaste'%}selected{%endif%} value="-average_aftertaste">Average Aftertaste - ↓</option>
+                                <option {%if request.GET.sort == 'name'%}selected{%endif%} value="name">Name - ↑</option>
+                                <option {%if request.GET.sort == '-name'%}selected{%endif%} value="-name">Name - ↓</option>
+                                <option {%if request.GET.sort == 'drink_brand__name'%}selected{%endif%} value="drink_brand__name">Brand Name - ↑</option>
+                                <option {%if request.GET.sort == '-drink_brand__name'%}selected{%endif%} value="-drink_brand__name">Brand Name - ↓</option>
                             </select>
                         </div>
-                        <div class="col-auto">
-                            <div class="form-check">
-                                <input class="form-check-input search-drinks-param" type="radio" name="view" id="view1" value="gallery" checked onchange="$('#search-drinks-button').click()">
-                                <label class="form-check-label" for="view1">
-                                Gallery
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input search-drinks-param" type="radio" name="view" id="view2" value="list" onchange="$('#search-drinks-button').click()">
+                        <div class="col-auto px-1" style="font-size:12px">
+                            <div class="form-check pt-1">
+                                <input class="form-check-input search-drinks-param" type="radio" name="view" id="view2" value="list" onchange="$('#search-drinks-button').click()"
+                                {%if request.GET.view != 'gallery'%}checked{%endif%}>
                                 <label class="form-check-label" for="view2">
                                 List
                                 </label>
                             </div>
                         </div>
+                        <div class="col-auto px-1" style="font-size:12px">
+                            <div class="form-check pt-1">
+                                <input class="form-check-input search-drinks-param" type="radio" name="view" id="view1" value="gallery" onchange="$('#search-drinks-button').click()"
+                                {%if request.GET.view == 'gallery'%}checked{%endif%}>
+                                <label class="form-check-label" for="view1">
+                                Gallery
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <hr class="m-0 mt-2">
+                    <div class="row">
+                        <div class="col center mt-3">
+                            <button class="btn btn-light collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#main-filter-panel" aria-expanded="false">
+                                Show/Hide Filters
+                            </button>
+                        </div>
+                    </div>
                     <div class="row mt-3" id="search-drinks-content">
                         {% comment %} {%if view == 'list'%}
                         {% include 'drink/htmx/search_drinks_list_htmx.html'%}
