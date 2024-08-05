@@ -22,6 +22,10 @@
         <script src="{% static 'js/fontawesome.js' %}"></script>
 
         <style>
+            html, body {
+                max-width: 100%;
+                overflow-x: hidden;
+            }
             html {
                 font-size: 14px
             }
@@ -77,9 +81,26 @@
                 cursor: pointer;
                 transition: color 0.3s;
             }
+            .review-img {
+                padding:6px; 
+                max-width:180px; 
+                max-height:180px; 
+                width: auto; 
+                height: auto;
+            }
             @media (max-width:768px){
                 .display-star {
                     font-size: 8px; /* Make the stars smaller */
+                }
+                .input-star {
+                    font-size: 17px; /* Make the stars smaller */
+                }
+                .review-img {
+                    padding:6px; 
+                    max-width:120px; 
+                    max-height:120px; 
+                    width: auto; 
+                    height: auto;
                 }
             }
             
@@ -87,14 +108,15 @@
                 color: #ffbd00;
             }
             
-            {% comment %} .collapsing {
+            .collapsing {
                 transition: none !important;
-            } {% endcomment %}
+            }
+            
+    
             .drink-img {
-                padding: 3px; /* Maintain the specified padding */
-                object-fit: cover; /* Ensure the image covers the dimensions without stretching */
-                object-position: center; /* Center the image */
-                overflow: hidden;
+                width: auto;
+                height: 100%;
+                object-fit: contain; /* This will cover the container, cutting off sides */
             }
         </style>
         <script>                 
@@ -166,7 +188,7 @@
         <nav class="navbar navbar-expand-lg energy-drink-theme">
             <div class="container-fluid">
                 <div>
-                    <a class="navbar-brand me-2" href="{% url 'search-drinks' %}">Caffeine Collection</a>
+                    <a class="navbar-brand me-3" href="{% url 'search-drinks' %}">Caffeine Collection</a>
                     {%if request.user.is_authenticated%} 
                     <button class="navbar-toggler"
                             type="button"

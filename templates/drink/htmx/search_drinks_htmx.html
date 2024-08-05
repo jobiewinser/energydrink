@@ -130,7 +130,7 @@
                 
                 <div class="col">
                     <div class="row m-0 mt-3 filter-panel collapse show">
-                        <div class="col mr-1 pe-0">
+                        <div class="col mr-1 px-0">
                             <input class="form-control form-control-sm" name="search" type="search" placeholder="Search for drinks..." aria-label="Search" id="search-bar"
                                 oninput="$('#page_load_indicator').addClass('htmx-request')"
                                 {%if request.GET.search%}value="{{request.GET.search}}"{%endif%}
@@ -161,7 +161,7 @@
                         <div class="col-auto px-1" style="font-size:12px">
                             <div class="form-check pt-1">
                                 <input class="form-check-input search-drinks-param" type="radio" name="view" id="view2" value="list" onchange="$('#search-drinks-button').click()"
-                                {%if request.GET.view != 'gallery'%}checked{%endif%}>
+                                {%if view == 'list'%}checked{%endif%}>
                                 <label class="form-check-label" for="view2">
                                 List
                                 </label>
@@ -170,7 +170,7 @@
                         <div class="col-auto px-1" style="font-size:12px">
                             <div class="form-check pt-1">
                                 <input class="form-check-input search-drinks-param" type="radio" name="view" id="view1" value="gallery" onchange="$('#search-drinks-button').click()"
-                                {%if request.GET.view == 'gallery'%}checked{%endif%}>
+                                {%if view == 'gallery'%}checked{%endif%}>
                                 <label class="form-check-label" for="view1">
                                 Gallery
                                 </label>

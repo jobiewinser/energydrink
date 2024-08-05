@@ -5,13 +5,11 @@
     <div class="row border my-1 pointer align-items-center nowrap" style="min-width:355px" onclick="window.location.replace('{%url 'view-drink' pk=drink.pk%}')">
         <div class="col-auto p-0 me-2">
             <div class="d-flex align-items-center" style="height:85px">
-                <div class="center">
-                    {% if drink.image %}
-                    <img src="{{ drink.image.url }}" class="card-img-top drink-img" alt="{{ drink.name }}" style="padding:3px; width:50px; height:85px;">
-                    {% else %}
-                    <img src="{% static 'img/coming-soon.jpg' %}" class="card-img-top drink-img" style="padding:3px; width:45px; height:85px;">
-                    {% endif %}
-                </div>
+                {% if drink.image %}
+                <img src="{{ drink.image.url }}" class="card-img-top drink-img" alt="{{ drink.name }}" style="padding:3px; width:50px; height:85px;">
+                {% else %}
+                <img src="{% static 'img/coming-soon.jpg' %}" class="card-img-top drink-img" style="padding:3px; width:45px; height:85px;">
+                {% endif %}
             </div>
         </div>
         <div class="col px-1">
@@ -25,9 +23,7 @@
                             {% if drink.review_drink.exists %}
                             <a href="{% url 'reviews' pk=drink.pk %}" class="nowrap">{{ drink.review_drink.count }} Review{% if not drink.review_drink.count == 1 %}s{% endif %}</a>
                             {% else %}
-                            <div class="center mt-2">
-                                <a href="{% url 'review-drink' pk=drink.pk %}" class="nowrap">Be the first to review!</a>
-                            </div>
+                            <a href="{% url 'review-drink' pk=drink.pk %}" class="nowrap">Be the first to review!</a>
                             {% endif %}
                         </div>
                     </div>   

@@ -19,9 +19,15 @@
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" id="password" name="password" aria-describedby="password">
             </div>
-            <button class="btn btn-success mb-3" type="submit">Login</button>
+            <div class="row">
+                <div class="col">
+                    <button class="btn btn-success mb-3" type="submit">Login</button>
+                </div>
+                <div class="col">
+                    <a class="btn btn-secondary" href="{%url 'register'%}">Register</a>
+                </div>
+            </div>
 
-            <a class="btn btn-secondary" href="{%url 'register'%}">Register</a>
             {% csrf_token %}
         </form>
     </div>

@@ -39,7 +39,42 @@
     <div class="col-auto">
         <div class="card p-3">
             <div class="row">
-                <div class="col">
+                <div class="col center">
+                    <div class="card">
+                        <div class="center">
+                            {%if drink.image%}
+                            <img src="{{ drink.image.url }}" class="card-img-top review-img" alt="{{ drink.name }}">
+                            {%else%}
+                            <img src="{%static 'img/coming-soon.jpg'%}" class="card-img-top review-img">
+                            {%endif%}
+                        </div>
+                        <div class="card-body">
+                            <div class="row m-0">
+                                <div class="col p-0">
+                                </div>
+                                <div class="col-auto">
+                                    <div class="row m-0">
+                                        <div class="col center">
+                                            <h5 class="card-title">{{ drink.name }}</h5>
+                                            <h6 class="card-subtitle mb-2 text-muted">{{ drink.drink_brand.name }}</h6>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="col p-0 pe-1 right nowrap">
+                                            <p class="card-text mb-0" style="font-size:13px">{%if drink.caffeine_per_hundred_ml is not None%}{{ drink.caffeine_per_hundred_ml|round_tag:0 }}{%else%}?{%endif%} <span class="text-black-50" style="font-size:12px">mg/100ml</span></p>
+                                        </div>
+                                        <div class="col p-0 ps-1 nowrap">
+                                            <a href="{%url 'reviews' pk=drink.pk%}" class="nowrap">{{drink.review_drink.count}} Review{%if not drink.review_drink.count == 1%}s{%endif%}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col p-0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col center">
                     <form id="review_form"
                         autocomplete="off" autofill="off"
                         hx-encoding="multipart/form-data" hx-trigger="submit"
@@ -50,18 +85,26 @@
                         hx-push-url="true">
 
                         <div class="mb-3" id="taste-panel">
-                            <label for="title" class="form-label mb-0">Taste</label>                
-                            <div class="star-rating">
-                                <span class="star" data-rating="1"><i class="fas fa-star"></i></span>
-                                <span class="star" data-rating="2"><i class="fas fa-star"></i></span>
-                                <span class="star" data-rating="3"><i class="fas fa-star"></i></span>
-                                <span class="star" data-rating="4"><i class="fas fa-star"></i></span>
-                                <span class="star" data-rating="5"><i class="fas fa-star"></i></span>
-                                <span class="star" data-rating="6"><i class="fas fa-star"></i></span>
-                                <span class="star" data-rating="7"><i class="fas fa-star"></i></span>
-                                <span class="star" data-rating="8"><i class="fas fa-star"></i></span>
-                                <span class="star" data-rating="9"><i class="fas fa-star"></i></span>
-                                <span class="star" data-rating="10"><i class="fas fa-star"></i></span>
+                            <label for="title" class="form-label mb-0">Taste</label>                   
+                            <div class="row">
+                                <div class="col">
+                                </div>
+                                <div class="col-auto nowrap">
+                                    <div class="star-rating">
+                                        <span class="star" data-rating="1"><i class="fas fa-star input-star"></i></span>
+                                        <span class="star" data-rating="2"><i class="fas fa-star input-star"></i></span>
+                                        <span class="star" data-rating="3"><i class="fas fa-star input-star"></i></span>
+                                        <span class="star" data-rating="4"><i class="fas fa-star input-star"></i></span>
+                                        <span class="star" data-rating="5"><i class="fas fa-star input-star"></i></span>
+                                        <span class="star" data-rating="6"><i class="fas fa-star input-star"></i></span>
+                                        <span class="star" data-rating="7"><i class="fas fa-star input-star"></i></span>
+                                        <span class="star" data-rating="8"><i class="fas fa-star input-star"></i></span>
+                                        <span class="star" data-rating="9"><i class="fas fa-star input-star"></i></span>
+                                        <span class="star" data-rating="10"><i class="fas fa-star input-star"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                </div>
                             </div>
                             <input type="hidden" id="taste-value" name="taste" {%if review%}value="{{review.taste}}"{%endif%}>
                             <div id="description_help" class="form-text">How good is the taste of the drink.</div>
@@ -69,27 +112,29 @@
 
                         <div class="mb-3" id="aftertaste-panel">
                             <label for="title" class="form-label mb-0">Aftertaste <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>                
-                            <div class="star-rating">
-                                <span class="star" data-rating="1"><i class="fas fa-star"></i></span>
-                                <span class="star" data-rating="2"><i class="fas fa-star"></i></span>
-                                <span class="star" data-rating="3"><i class="fas fa-star"></i></span>
-                                <span class="star" data-rating="4"><i class="fas fa-star"></i></span>
-                                <span class="star" data-rating="5"><i class="fas fa-star"></i></span>
-                                <span class="star" data-rating="6"><i class="fas fa-star"></i></span>
-                                <span class="star" data-rating="7"><i class="fas fa-star"></i></span>
-                                <span class="star" data-rating="8"><i class="fas fa-star"></i></span>
-                                <span class="star" data-rating="9"><i class="fas fa-star"></i></span>
-                                <span class="star" data-rating="10"><i class="fas fa-star"></i></span>
+                            <div class="row">
+                                <div class="col">
+                                </div>
+                                <div class="col-auto nowrap">
+                                    <div class="star-rating">
+                                        <span class="star" data-rating="1"><i class="fas fa-star input-star"></i></span>
+                                        <span class="star" data-rating="2"><i class="fas fa-star input-star"></i></span>
+                                        <span class="star" data-rating="3"><i class="fas fa-star input-star"></i></span>
+                                        <span class="star" data-rating="4"><i class="fas fa-star input-star"></i></span>
+                                        <span class="star" data-rating="5"><i class="fas fa-star input-star"></i></span>
+                                        <span class="star" data-rating="6"><i class="fas fa-star input-star"></i></span>
+                                        <span class="star" data-rating="7"><i class="fas fa-star input-star"></i></span>
+                                        <span class="star" data-rating="8"><i class="fas fa-star input-star"></i></span>
+                                        <span class="star" data-rating="9"><i class="fas fa-star input-star"></i></span>
+                                        <span class="star" data-rating="10"><i class="fas fa-star input-star"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                </div>
                             </div>
                             <input type="hidden" id="aftertaste-value" name="aftertaste" {%if review%}value="{{review.aftertaste}}"{%endif%}>
                             <div id="description_help" class="form-text">How good is the aftertaste of the drink.</div>
                         </div>
-                        
-                        <p>
-                            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-review-panel" aria-expanded="false" aria-controls="advanced-review-panel">
-                            Tell us more
-                            </button>
-                        </p>
                         <hr>
                         <div class="collapse" id="advanced-review-panel">
                             <div class="mb-3">
@@ -143,43 +188,11 @@
                         </div>
                         
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-review-panel" aria-expanded="false" aria-controls="advanced-review-panel">
+                        Tell us more
+                        </button>
+                        <button type="submit" class="btn btn-success btn-sm">Submit</button>
                     </form>
-                </div>
-                <div class="col-auto">
-                    <div class="card pointer">
-                        <div class="center">
-                            {%if drink.image%}
-                            <img src="{{ drink.image.url }}" class="card-img-top" alt="{{ drink.name }}" style="padding:6px; max-width:180px; max-height:180px; width: auto; height: auto;">
-                            {%else%}
-                            <img src="{%static 'img/coming-soon.jpg'%}" class="card-img-top" style="padding:6px; max-width:180px; max-height:180px; width: auto; height: auto;">
-                            {%endif%}
-                        </div>
-                        <div class="card-body">
-                            <div class="row m-0">
-                                <div class="col p-0">
-                                </div>
-                                <div class="col-auto">
-                                    <div class="row m-0">
-                                        <div class="col center">
-                                            <h5 class="card-title">{{ drink.name }}</h5>
-                                            <h6 class="card-subtitle mb-2 text-muted">{{ drink.drink_brand.name }}</h6>
-                                        </div>
-                                    </div>
-                                    <div class="row m-0">
-                                        <div class="col p-0 pe-1 right nowrap">
-                                            <p class="card-text mb-0" style="font-size:13px">{%if drink.caffeine_per_hundred_ml is not None%}{{ drink.caffeine_per_hundred_ml|round_tag:0 }}{%else%}?{%endif%} <span class="text-black-50" style="font-size:12px">mg/100ml</span></p>
-                                        </div>
-                                        <div class="col p-0 ps-1 nowrap">
-                                            <a href="{%url 'reviews' pk=drink.pk%}" class="nowrap">{{drink.review_drink.count}} Review{%if not drink.review_drink.count == 1%}s{%endif%}</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col p-0">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

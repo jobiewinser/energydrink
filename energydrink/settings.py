@@ -21,9 +21,22 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_countries",
+    "django_user_agents",
     "drink",
     "core",
 ]
+
+# Cache backend is optional, but recommended to speed up user agent parsing
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#         'LOCATION': '127.0.0.1:11211',
+#     }
+# }
+
+# Name of cache backend to cache user agents. If it not specified default
+# cache alias will be used. Set to `None` to disable caching.
+# USER_AGENTS_CACHE = 'default'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -33,7 +46,9 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_user_agents.middleware.UserAgentMiddleware",
 ]
+
 
 ROOT_URLCONF = "energydrink.urls"
 

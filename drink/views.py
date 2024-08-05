@@ -166,10 +166,17 @@ class SearchDrinksView(TemplateView):
     template_name = "drink/search_drinks.html"
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        if self.request.META.get("HTTP_HX_REQUEST", "false") == "true":
-            view = self.request.GET.get("view") or "list"
-            self.template_name = f"drink/htmx/search_drinks_{view}_htmx.html"
         context = super().get_context_data(**kwargs)
+        view = self.request.GET.get("view")
+        if not view:
+            is_mobile = self.request.user_agent.is_mobile
+            if is_mobile:
+                view = "list"
+            else:
+                view = "gallery"
+        context["view"] = view
+        if self.request.META.get("HTTP_HX_REQUEST", "false") == "true":
+            self.template_name = f"drink/htmx/search_drinks_{view}_htmx.html"
         context["unapproved_drinks"] = drinkmodels.Drink.objects.filter(
             approved=False, submitted_by=self.request.user
         )
