@@ -2,7 +2,7 @@
 {%load core_tags drink_tags%}
 <div>
     {% for drink in drinks %}
-    <div class="row border my-1 pointer align-items-center nowrap" style="min-width:355px" onclick="window.location.replace('{%url 'view-drink' pk=drink.pk%}')">
+    <div class="row border my-1 pointer align-items-center nowrap-col" style="min-width:355px" onclick="window.location.replace('{%url 'view-drink' pk=drink.pk%}')">
         <div class="col-auto p-0 me-2">
             <div class="d-flex align-items-center" style="height:85px">
                 {% if drink.image %}
@@ -15,20 +15,20 @@
         <div class="col px-1">
             <div class="d-flex align-items-center" style="height:110px">
                 <div class="card-body">  
-                    <div class="row mt-1 nowrap">
-                        <div class="col">
-                            <h5 class="card-title">{{ drink.name }}</h5>
+                    <div class="row mt-1">
+                        <div class="col elipses-overflow">
+                            <h6 class="card-title">{{ drink.name }}</h6>
                         </div>
                         <div class="col-auto me-2">
                             {% if drink.review_drink.exists %}
                             <a href="{% url 'reviews' pk=drink.pk %}" class="nowrap">{{ drink.review_drink.count }} Review{% if not drink.review_drink.count == 1 %}s{% endif %}</a>
-                            {% else %}
+                            {% elif request.user.id %}
                             <a href="{% url 'review-drink' pk=drink.pk %}" class="nowrap">Be the first to review!</a>
                             {% endif %}
                         </div>
                     </div>   
-                    <div class="row mt-1 nowrap">
-                        <div class="col">
+                    <div class="row mt-1">
+                        <div class="col elipses-overflow">
                             <h6 class="card-subtitle text-muted">{{ drink.drink_brand.name }}</h6>
                         </div>
                         <div class="col-auto me-2">

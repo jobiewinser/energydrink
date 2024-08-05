@@ -1,8 +1,8 @@
 {%load static%}
 {%load core_tags drink_tags%}
 <div>   
-    <div class="row border m-1 pointer align-items-center nowrap" onclick="window.location.replace('{%url 'view-drink' pk=drink.pk%}')">
-        <div class="col-auto mx-1">
+    <div class="row border m-1 align-items-center nowrap">
+        <div class="col-auto mx-1 pointer" onclick="window.location.replace('{%url 'view-drink' pk=drink.pk%}')">
             <div class="d-flex align-items-center" style="height:85px">
                 <div class="center">
                     {% if drink.image %}
@@ -14,21 +14,21 @@
             </div>
         </div>
         <div class="col px-1">
-            <div class="d-flex align-items-center" style="height:110px">
+            <div class="d-flex align-items-center" >
                 <div class="card-body">  
                     <div class="row">
-                        <div class="col">
+                        <div class="col-auto pointer" onclick="window.location.replace('{%url 'view-drink' pk=drink.pk%}')">
                             <div class="row mt-4 nowrap">
                                 <div class="col">
-                                    <h5 class="card-title">{{ drink.name }}</h5>
+                                    <h5 class="card-title elipses-overflow pb-1">{{ drink.name }}</h5>
                                 </div>
                             </div>   
                             <div class="row mt-1 nowrap">
                                 <div class="col">
-                                    <h6 class="card-subtitle text-muted">{{ drink.drink_brand.name }}</h6>
+                                    <h6 class="card-subtitle mb-2 text-muted elipses-overflow">{{ drink.drink_brand.name }}</h6>
                                 </div>
                             </div>  
-                            {%if not drink.review_drink.exists%}
+                            {%if not drink.review_drink.exists and request.user.id%}
                                 <div class="row mt-1 nowrap">
                                     <div class="col">
                                         <a href="{%url 'review-drink' pk=drink.pk%}" class="nowrap">Be the first to review!</a>
@@ -41,7 +41,7 @@
                                 <div class="col border-end ps-1 pe-0">
                                     <div class="taste-rating nowrap center">
                                         <div class="nowrap pe-2 ps-0">
-                                            <span class="card-text" style="font-size:11px">Taste</span>
+                                            <span class="card-text" style="font-size:11px">Average Taste</span>
                                             <br>
                                             {% for star in 0|range_tag:drink.average_taste %}
                                             <i class="fas fa-star yellow-star display-star"></i>
@@ -53,11 +53,11 @@
                                     </div>
                                 </div>
                             </div> 
-                            <div class="row mt-1 nowrap">
+                            <div class="row my-1 nowrap">
                                 <div class="col ps-1 pe-1">
                                     <div class="aftertaste-rating nowrap center">
                                         <div class="nowrap pe-2 ps-0">
-                                            <span class="card-text" style="font-size:11px">Aftertaste</span>
+                                            <span class="card-text" style="font-size:11px">Average Aftertaste</span>
                                             <br>
                                             {% for star in 0|range_tag:drink.average_aftertaste %}
                                             <i class="fas fa-star yellow-star display-star"></i>

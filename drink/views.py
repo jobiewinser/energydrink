@@ -151,7 +151,7 @@ class ReviewDrinkView(TemplateView):
         return response
 
 
-@method_decorator(login_required, name="dispatch")
+# @method_decorator(login_required, name="dispatch")
 class ReviewsView(TemplateView):
     template_name = "drink/reviews.html"
 
@@ -161,7 +161,7 @@ class ReviewsView(TemplateView):
         return context
 
 
-@method_decorator(login_required, name="dispatch")
+# @method_decorator(login_required, name="dispatch")
 class SearchDrinksView(TemplateView):
     template_name = "drink/search_drinks.html"
 
@@ -177,9 +177,10 @@ class SearchDrinksView(TemplateView):
         context["view"] = view
         if self.request.META.get("HTTP_HX_REQUEST", "false") == "true":
             self.template_name = f"drink/htmx/search_drinks_{view}_htmx.html"
-        context["unapproved_drinks"] = drinkmodels.Drink.objects.filter(
-            approved=False, submitted_by=self.request.user
-        )
+        if self.request.user.id:
+            context["unapproved_drinks"] = drinkmodels.Drink.objects.filter(
+                approved=False, submitted_by=self.request.user
+            )
         drinks = drinkmodels.Drink.objects.all()
         if not self.request.user.is_superuser:
             drinks = drinks.filter(approved=True)
@@ -216,7 +217,7 @@ class SearchDrinksView(TemplateView):
         return context
 
 
-@method_decorator(login_required, name="dispatch")
+# @method_decorator(login_required, name="dispatch")
 class ViewDrinkView(TemplateView):
     template_name = "drink/view_drink.html"
 

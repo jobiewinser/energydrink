@@ -41,6 +41,22 @@
             .nowrap {
                 white-space: nowrap;
             }
+            .nowrap-col {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow: hidden;
+            }
+
+            .elipses-overflow {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            
+            .hidden-overflow {
+                overflow: hidden;
+                text-overflow: hidden;
+            }
             .htmx-indicator {
                 visibility: hidden;
                 opacity: 0;
@@ -189,7 +205,6 @@
             <div class="container-fluid">
                 <div>
                     <a class="navbar-brand me-3" href="{% url 'search-drinks' %}">Caffeine Collection</a>
-                    {%if request.user.is_authenticated%} 
                     <button class="navbar-toggler"
                             type="button"
                             data-bs-toggle="collapse"
@@ -199,22 +214,22 @@
                             aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    {%endif%}
                 </div>
-                {%if request.user.is_authenticated%} 
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                {% comment %} <div class="collapse navbar-collapse" id="navbarNavDropdown"> {% endcomment %}
                     <ul class="navbar-nav">
                         <li class="nav-item me-2">
                             <a class="nav-link" href="{% url 'search-drinks' %}">Search for Drinks</a>
                         </li>
+                        {%if request.user.is_authenticated%} 
                         <li class="nav-item me-2">
                             <a class="nav-link" href="{% url 'submit-drink' %}">Submit a Drink</a>
                         </li>
+                        {%endif%}
                         
                     </ul>
                 </div>
-                {%endif%}
-                <ul class="navbar-nav d-flex"  style="height:54px">
+                <ul class="navbar-nav d-flex"  style="">
                     {%if request.user.is_authenticated%} 
                     <li class="nav-item dropdown">
                         <button type="button" class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="true" data-bs-display="static">
@@ -230,11 +245,11 @@
                         </ul>
                     </li>
                     {%else%}
-                    {% comment %} <li class="nav-item">
-                        <a class="pointer btn btn-secondary ms-3" href="/accounts/login/">
+                    <li class="nav-item">
+                        <a class="pointer btn btn-light ms-3" href="/accounts/login/">
                             Login
                         </a>
-                    </li> {% endcomment %}
+                    </li>
                     {%endif%}
                 </ul>
             </div>
