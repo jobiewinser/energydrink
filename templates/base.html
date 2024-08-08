@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Caffeine Collection</title>                   
-        <script src="{% static 'js/jquery-3.6.0.js' %}"></script>     
+        <script src="{% static 'js/jquery-3.7.1.js' %}"></script>     
         <!-- Bootstrap CSS -->
         <link href="{% static 'css/bootstrap.min.css' %}"
               rel="stylesheet">
@@ -134,69 +134,115 @@
                 height: 100%;
                 object-fit: contain; /* This will cover the container, cutting off sides */
             }
+            .hover-link {
+                cursor: pointer;
+            }
+            .hover-link:hover {
+                color:purple;
+            }
         </style>
-        <script>                 
+        <script>
             $(document).ready(function() {
-                select2stuff()
-                function select2stuff(){
-                    $('.select2:not([data-select2-id])').select2({
-                        searchInputPlaceholder: '🔎 Search here...',        
-                        theme: 'bootstrap-5',
-                    })
-                }
+                select2stuff();
                 $('.select2tag:not([data-select2-id])').select2({     
                     tags: true,
                     createTag: function (tag) {
                         return {id: tag.term, text: tag.term, tag: true};
                     }
-                })
+                });
                 $('.select2tag').on('select2:open', function (e) {
                     const evt = "scroll.select2";
                     $(e.target).parents().off(evt);
                     $(window).off(evt);
                 });
-
-                function snackbarShow(message, bootstrap_colour, display_ms=3000) {
-                    // Get the snackbar DIV
-                    var x = document.getElementById("snackbar");
-                    x.innerHTML = message;
-                    // Add the "show" class to DIV
-                    x.className = "show bg-"+bootstrap_colour;
-                    // After 3 seconds, remove the show class from DIV
-                    setTimeout(function() { x.className = x.className.replace("show", ""); }, display_ms);
-                }
-
-                function basehandlehtmxafterSettle(evt){
-                    let status = evt.detail.xhr.status;
-                    let srcElement = $(evt.srcElement);
-                    if(status == 200) {
-                        if (![undefined, ''].includes(evt.detail.pathInfo.requestPath)){
-                            $('.modal').modal('hide'); // closes all active pop ups.
-                            $('.modal-backdrop').remove(); // removes the grey overlay.
-                            snackbarShow('Success!', 'success');
-                            select2stuff();
-                        }
-                    }
-                };
                 document.body.addEventListener('htmx:afterSettle', basehandlehtmxafterSettle);
-
-                function basehandlehtmxafterRequest(evt){
-                    let status = evt.detail.xhr.status;
-                    let srcElement = $(evt.srcElement);
-                    if (status == 404) {
-                        snackbarShow('Error: '+evt.detail.xhr.response, 'danger', display_ms=5000);         
-                    }else if (status == 500){
-                        snackbarShow('Error: '+evt.detail.xhr.response, 'danger', display_ms=5000);         
-                    }else if (status == 400){
-                        snackbarShow('Error: '+evt.detail.xhr.response, 'danger', display_ms=5000);        
-                    }else if (status == 401){
-                        snackbarShow('Unauthorized: '+evt.detail.xhr.response, 'danger', display_ms=5000);         
-                    }else if (status == 403){
-                        snackbarShow('You are not permitted to perform this action: '+evt.detail.xhr.response, 'danger', display_ms=5000);         
-                    }
-                };
                 document.body.addEventListener('htmx:afterRequest', basehandlehtmxafterRequest);
+
+                {% comment %} htmx.config.historyCacheSize = 0; {% endcomment %}
             });
+            function select2stuff(){
+                $('.select2:not([data-select2-id])').select2({
+                    searchInputPlaceholder: '🔎 Search here...',        
+                    theme: 'bootstrap-5',
+                })
+            };
+
+            function setupStars(key, click_search=false) {
+                const stars = document.querySelectorAll('#'+key+'-panel .star');
+                const ratingValue = document.getElementById(key+'-value');
+            
+                stars.forEach((star, index) => {
+                    star.addEventListener('click', () => {
+                        ratingValue.value = index + 1;
+                        highlightStars(index);
+                        if (click_search) {
+                            $('#search-drinks-button').click()
+                        }
+                    });
+                    star.addEventListener('mouseover', () => {
+                        highlightStars(index);
+                    });
+                    star.addEventListener('mouseleave', () => {
+                        highlightStars(ratingValue.value - 1);
+                    });
+                });
+            
+                function highlightStars(index) {
+                    stars.forEach((star, i) => {
+                        star.classList.toggle('checked', i <= index);
+                    });
+                }
+            
+                // Initialize with no stars highlighted
+                highlightStars(ratingValue.value - 1);
+            }
+
+            function basehandlehtmxafterRequest(evt){
+                let status = evt.detail.xhr.status;
+                let srcElement = $(evt.srcElement);
+                if (status == 404) {
+                    snackbarShow('Error: '+evt.detail.xhr.response, 'danger', display_ms=5000);         
+                }else if (status == 500){
+                    snackbarShow('Error: '+evt.detail.xhr.response, 'danger', display_ms=5000);         
+                }else if (status == 400){
+                    snackbarShow('Error: '+evt.detail.xhr.response, 'danger', display_ms=5000);        
+                }else if (status == 401){
+                    snackbarShow('Unauthorized: '+evt.detail.xhr.response, 'danger', display_ms=5000);         
+                }else if (status == 403){
+                    snackbarShow('You are not permitted to perform this action: '+evt.detail.xhr.response, 'danger', display_ms=5000);         
+                }
+            };
+
+            function snackbarShow(message, bootstrap_colour, display_ms=3000) {
+                // Get the snackbar DIV
+                var x = document.getElementById("snackbar");
+                x.innerHTML = message;
+                // Add the "show" class to DIV
+                x.className = "show bg-"+bootstrap_colour;
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function() { x.className = x.className.replace("show", ""); }, display_ms);
+            }
+
+            function basehandlehtmxafterSettle(evt){
+                let status = evt.detail.xhr.status;
+                let srcElement = $(evt.srcElement);
+                if(status == 200) {
+                    if (![undefined, ''].includes(evt.detail.pathInfo.requestPath)){
+                        $('.modal').modal('hide'); // closes all active pop ups.
+                        $('.modal-backdrop').remove(); // removes the grey overlay.
+                        snackbarShow('Success!', 'success');
+                        select2stuff();
+                    }
+                    if (evt.detail.pathInfo.requestPath.includes('search-drinks')) {
+                        setupStars('taste', click_search=true);
+                        setupStars('aftertaste', click_search=true);
+                    }
+                    if (evt.detail.pathInfo.requestPath.includes('review-drink')) {
+                        setupStars('taste', click_search=false);
+                        setupStars('aftertaste', click_search=false);
+                    }
+                }
+            };
         </script>
     </head>
     <body style="width: 100%">
@@ -204,7 +250,11 @@
         <nav class="navbar navbar-expand-lg energy-drink-theme">
             <div class="container-fluid">
                 <div>
-                    <a class="navbar-brand me-3" href="{% url 'search-drinks' %}">Caffeine Collection</a>
+                    <a class="navbar-brand me-3" href="#"
+                        hx-get="{%url 'list-drinks'%}" hx-target="#content"
+                        hx-swap="innerHTML"
+                        hx-indicator="#page_load_indicator"
+                        hx-push-url="true">Caffeine Collection</a>
                     <button class="navbar-toggler"
                             type="button"
                             data-bs-toggle="collapse"
@@ -219,11 +269,19 @@
                 {% comment %} <div class="collapse navbar-collapse" id="navbarNavDropdown"> {% endcomment %}
                     <ul class="navbar-nav">
                         <li class="nav-item me-2">
-                            <a class="nav-link" href="{% url 'search-drinks' %}">Search for Drinks</a>
+                            <a class="nav-link" href="#"
+                                hx-get="{%url 'list-drinks'%}" hx-target="#content"
+                                hx-swap="innerHTML"
+                                hx-indicator="#page_load_indicator"
+                                hx-push-url="true">Search for Drinks</a>
                         </li>
                         {%if request.user.is_authenticated%} 
                         <li class="nav-item me-2">
-                            <a class="nav-link" href="{% url 'submit-drink' %}">Submit a Drink</a>
+                            <a class="nav-link" href="#"
+                                hx-get="{%url 'edit-drink'%}" hx-target="#content"
+                                hx-swap="innerHTML"
+                                hx-indicator="#page_load_indicator"
+                                hx-push-url="true">Submit a Drink</a>
                         </li>
                         {%endif%}
                         
@@ -236,9 +294,17 @@
                           <b>{%if request.user.profile.display_name%}{{request.user.profile.display_name}}{%else%}{{request.user}}{%endif%}</b>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" data-bs-popper="static">
-                        <li><a class="dropdown-item" href="{% url 'profile'%}">Edit Profile</a></li>
+                        <li><a class="dropdown-item" href="#"
+                                hx-get="{%url 'profile'%}" hx-target="#content"
+                                hx-swap="innerHTML"
+                                hx-indicator="#page_load_indicator"
+                                hx-push-url="true">Edit Profile</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <form method="post" action="{% url 'logout' %}">
+                            <form method="post" href="#"
+                                hx-get="{%url 'logout'%}" hx-target="#content"
+                                hx-swap="innerHTML"
+                                hx-indicator="#page_load_indicator"
+                                hx-push-url="true">
                                 {% csrf_token %}
                                 <li><button class="dropdown-item" type="submit">Sign out</button></li>
                             </form>

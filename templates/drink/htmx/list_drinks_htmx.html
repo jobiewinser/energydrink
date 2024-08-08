@@ -1,37 +1,37 @@
 {%load core_tags%}
-<span>   
+<div>   
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            setupStars('taste');
-            setupStars('aftertaste');
-        });
-        function setupStars(key) {
-                const stars = document.querySelectorAll('#'+key+'-panel .star');
-                const ratingValue = document.getElementById(key+'-value');           
-
-                stars.forEach((star, index) => {
-                    star.addEventListener('click', () => {
-                        ratingValue.value = index + 1;
-                        highlightStars(index);
-                        $('#search-drinks-button').click()
-                    });
-                    star.addEventListener('mouseover', () => {
-                        highlightStars(index);
-                    });
-                    star.addEventListener('mouseleave', () => {
-                        highlightStars(ratingValue.value - 1);
-                    });
-                });
-            
-                function highlightStars(index) {
-                    stars.forEach((star, i) => {
-                        star.classList.toggle('checked', i <= index);
-                    });
-                }
-            
-                // Initialize with no stars highlighted
-                highlightStars(ratingValue.value - 1);
+        if (document.getElementById('page_load_indicator') == null) {
+            location.reload();
         }
+        
+        {% comment %} function setupStars(key) {
+            const stars = document.querySelectorAll('#'+key+'-panel .star');
+            const ratingValue = document.getElementById(key+'-value');           
+
+            stars.forEach((star, index) => {
+                star.addEventListener('click', () => {
+                    ratingValue.value = index + 1;
+                    highlightStars(index);
+                    $('#search-drinks-button').click()
+                });
+                star.addEventListener('mouseover', () => {
+                    highlightStars(index);
+                });
+                star.addEventListener('mouseleave', () => {
+                    highlightStars(ratingValue.value - 1);
+                });
+            });
+        
+            function highlightStars(index) {
+                stars.forEach((star, i) => {
+                    star.classList.toggle('checked', i <= index);
+                });
+            }
+        
+            // Initialize with no stars highlighted
+            highlightStars(ratingValue.value - 1);
+        } {% endcomment %}
     </script>
     
     <div class="row m-2">
@@ -39,7 +39,7 @@
             hx-get="{%url 'search-drinks'%}" hx-target="#search-drinks-content"
             hx-swap="innerHTML"
             hx-indicator="#page_load_indicator"
-            hx-push-url="true"
+            hx-push-url="false"
             hx-trigger="submit, load"
             >
             <button hidden form="search-drinks-form" class="btn btn-outline-success my-2 my-sm-0 btn-sm" type="submit" id="search-drinks-button">Search</button>
@@ -196,4 +196,4 @@
             </div>
         </form>
     </div>
-</span>
+</div>

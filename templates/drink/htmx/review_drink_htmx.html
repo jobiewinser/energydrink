@@ -1,0 +1,178 @@
+{%load static core_tags %}
+<div>
+    <script>
+        if (document.getElementById('page_load_indicator') == null) {
+            location.reload();
+        }
+    </script>
+    <div class="row mt-3">
+        <div class="col">
+        </div>
+        <div class="col-auto">
+            <div class="card p-3">
+                <div class="row">
+                    <div class="col center">
+                        <div class="card">
+                            <div class="center">
+                                {%if drink.image%}
+                                <img src="{{ drink.image.url }}" class="card-img-top review-img" alt="{{ drink.name }}">
+                                {%else%}
+                                <img src="{%static 'img/coming-soon.jpg'%}" class="card-img-top review-img">
+                                {%endif%}
+                            </div>
+                            <div class="card-body">
+                                <div class="row m-0">
+                                    <div class="col p-0">
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="row m-0">
+                                            <div class="col center">
+                                                <h5 class="card-title elipses-overflow pb-1">{{ drink.name }}</h5>
+                                                <h6 class="card-subtitle mb-2 text-muted elipses-overflow">{{ drink.drink_brand.name }}</h6>
+                                            </div>
+                                        </div>
+                                        <div class="row m-0">
+                                            <div class="col p-0 pe-1 right nowrap">
+                                                <p class="card-text mb-0" style="font-size:13px">{%if drink.caffeine_per_hundred_ml is not None%}{{ drink.caffeine_per_hundred_ml|round_tag:0 }}{%else%}?{%endif%} <span class="text-black-50" style="font-size:12px">mg/100ml</span></p>
+                                            </div>
+                                            <div class="col p-0 ps-1 nowrap">
+                                                <a href="#"
+                                                hx-get="{%url 'reviews' pk=drink.pk%}" hx-target="#content"
+                                                hx-swap="innerHTML"
+                                                hx-indicator="#page_load_indicator"
+                                                hx-push-url="true" class="nowrap">{{drink.review_drink.count}} Review{%if not drink.review_drink.count == 1%}s{%endif%}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col p-0">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col center">
+                        <form id="review_form"
+                            autocomplete="off" autofill="off"
+                            hx-encoding="multipart/form-data" hx-trigger="submit"
+                            hx-post="{% url 'review-drink' pk=drink.pk %}"
+                            hx-indicator="#page_load_indicator"
+                            hx-target="#content"
+                            hx-swap="innerHTML"
+                            hx-push-url="true">
+
+                            <div class="mb-3" id="taste-panel">
+                                <label for="title" class="form-label mb-0">Taste</label>                   
+                                <div class="row">
+                                    <div class="col">
+                                    </div>
+                                    <div class="col-auto nowrap">
+                                        <div class="star-rating">
+                                            <span class="star" data-rating="1"><i class="fas fa-star input-star"></i></span>
+                                            <span class="star" data-rating="2"><i class="fas fa-star input-star"></i></span>
+                                            <span class="star" data-rating="3"><i class="fas fa-star input-star"></i></span>
+                                            <span class="star" data-rating="4"><i class="fas fa-star input-star"></i></span>
+                                            <span class="star" data-rating="5"><i class="fas fa-star input-star"></i></span>
+                                            <span class="star" data-rating="6"><i class="fas fa-star input-star"></i></span>
+                                            <span class="star" data-rating="7"><i class="fas fa-star input-star"></i></span>
+                                            <span class="star" data-rating="8"><i class="fas fa-star input-star"></i></span>
+                                            <span class="star" data-rating="9"><i class="fas fa-star input-star"></i></span>
+                                            <span class="star" data-rating="10"><i class="fas fa-star input-star"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                    </div>
+                                </div>
+                                <input type="hidden" id="taste-value" name="taste" {%if review.taste%}value="{{review.taste}}"{%endif%}>
+                                <div id="description_help" class="form-text">How good is the taste of the drink.</div>
+                            </div>
+
+                            <div class="mb-3" id="aftertaste-panel">
+                                <label for="title" class="form-label mb-0">Aftertaste <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>                
+                                <div class="row">
+                                    <div class="col">
+                                    </div>
+                                    <div class="col-auto nowrap">
+                                        <div class="star-rating">
+                                            <span class="star" data-rating="1"><i class="fas fa-star input-star"></i></span>
+                                            <span class="star" data-rating="2"><i class="fas fa-star input-star"></i></span>
+                                            <span class="star" data-rating="3"><i class="fas fa-star input-star"></i></span>
+                                            <span class="star" data-rating="4"><i class="fas fa-star input-star"></i></span>
+                                            <span class="star" data-rating="5"><i class="fas fa-star input-star"></i></span>
+                                            <span class="star" data-rating="6"><i class="fas fa-star input-star"></i></span>
+                                            <span class="star" data-rating="7"><i class="fas fa-star input-star"></i></span>
+                                            <span class="star" data-rating="8"><i class="fas fa-star input-star"></i></span>
+                                            <span class="star" data-rating="9"><i class="fas fa-star input-star"></i></span>
+                                            <span class="star" data-rating="10"><i class="fas fa-star input-star"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                    </div>
+                                </div>
+                                <input type="hidden" id="aftertaste-value" name="aftertaste" {%if review.aftertaste%}value="{{review.aftertaste}}"{%endif%}>
+                                <div id="description_help" class="form-text">How good is the aftertaste of the drink.</div>
+                            </div>
+                            <hr>
+                            <div class="collapse" id="advanced-review-panel">
+                                <div class="mb-3">
+                                    <label for="title" class="form-label">Review Title <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
+                                    <input type="text" class="form-control" id="title" name="title" aria-describedby="title" {%if review.title%}value="{{review.title}}"{%endif%}>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
+                                    <textarea type="text" class="form-control" id="description" name="description" aria-describedby="description">{%if review.description%}{{review.description}}{%endif%}</textarea>
+                                    <div id="description_help" class="form-text">Describe how the drinks tastes.</div>
+                                </div>
+                                <div class="mb-3 row nowrap-col">
+                                    <div class="col-auto">
+                                        <label for="currency" class="form-label nowrap">Currency <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
+                                        <select class="select2 form-control" name="currency" id="currency" aria-describedby="currency">
+                                            {%if review%}
+                                                {% for currency in currencies %}
+                                                <option value="{{ currency.0 }}" {% if review.currency == currency.0 %}selected{% endif %}>{{ currency.1 }}</option>
+                                                {% endfor %}
+                                            {% else %}
+                                                {% for currency in currencies %}
+                                                <option value="{{ currency.0 }}" {% if request.user.profile.currency == currency.0 %}selected{% endif %}>{{ currency.1 }}</option>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <label for="price_paid" class="form-label nowrap">Price <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
+                                        <input type="number" class="form-control" id="price_paid" name="price_paid" aria-describedby="price_paid" min="0" step="0.01"  {%if review.price_paid%}value="{{review.price_paid}}"{%endif%}/>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="drink_name" class="form-label">Image <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
+                                    <input name="image" placeholder="image" type="file" class="form-control modify_user_input" id="review-file" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="drink_name" class="form-label">Country Purchased <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
+                                    <select class="select2 form-control" name="country_purchased" id="country_purchased" aria-describedby="country">
+                                        {%if review%}
+                                            {% for country_code, country in countries.items %}
+                                            <option value="{{ country_code }}" {% if review.country_purchased == country_code %}selected{% endif %}>{{ country }}</option>
+                                            {% endfor %}
+                                        {% else %}
+                                            {% for country_code, country in countries.items %}
+                                            <option value="{{ country_code }}" {% if request.user.profile.country == country_code %}selected{% endif %}>{{ country }}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            {% csrf_token %}
+                            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-review-panel" aria-expanded="false" aria-controls="advanced-review-panel">
+                            Tell us more
+                            </button>
+                            <button type="submit" class="btn btn-success btn-sm">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+        </div>
+    </div>
+</div>

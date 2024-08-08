@@ -23,7 +23,7 @@ def range_tag(range_lower, range_upper):
 
 @register.filter
 def round_tag(number, digits):
-    return round(number, digits)
+    return round(float(number), int(digits))
 
 
 @register.filter

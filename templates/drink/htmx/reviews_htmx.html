@@ -1,8 +1,18 @@
 {%load static%}
 {%load core_tags drink_tags%}
 <div>   
+    <script>
+        if (document.getElementById('page_load_indicator') == null) {
+            location.reload();
+        }
+    </script>
     <div class="row border m-1 align-items-center nowrap">
-        <div class="col-auto mx-1 pointer" onclick="window.location.replace('{%url 'view-drink' pk=drink.pk%}')">
+        <div class="col-auto mx-1 pointer"
+            hx-get="{%url 'view-drink' pk=drink.pk%}" hx-target="#content"
+            hx-swap="innerHTML"
+            hx-indicator="#page_load_indicator"
+            hx-push-url="true"
+            hx-trigger="click">
             <div class="d-flex align-items-center" style="height:85px">
                 <div class="center">
                     {% if drink.image %}
@@ -17,7 +27,12 @@
             <div class="d-flex align-items-center" >
                 <div class="card-body">  
                     <div class="row">
-                        <div class="col-auto pointer" onclick="window.location.replace('{%url 'view-drink' pk=drink.pk%}')">
+                        <div class="col-auto pointer"
+                            hx-get="{%url 'view-drink' pk=drink.pk%}" hx-target="#content"
+                            hx-swap="innerHTML"
+                            hx-indicator="#page_load_indicator"
+                            hx-push-url="true"
+                            hx-trigger="click">
                             <div class="row mt-4 nowrap">
                                 <div class="col">
                                     <h5 class="card-title elipses-overflow pb-1">{{ drink.name }}</h5>
@@ -31,7 +46,11 @@
                             {%if not drink.review_drink.exists and request.user.id%}
                                 <div class="row mt-1 nowrap">
                                     <div class="col">
-                                        <a href="{%url 'review-drink' pk=drink.pk%}" class="nowrap">Be the first to review!</a>
+                                        <a href="#"
+                                            hx-get="{%url 'review-drink' pk=drink.pk%}" hx-target="#content"
+                                            hx-swap="innerHTML"
+                                            hx-indicator="#page_load_indicator"
+                                            hx-push-url="true" class="nowrap">Be the first to review!</a>
                                     </div>
                                 </div>  
                             {%endif%}

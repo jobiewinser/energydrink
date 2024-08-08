@@ -1,4 +1,9 @@
-<span id="drink_brand_container">
+<div id="drink_brand_container">
+    <script>
+        if (document.getElementById('page_load_indicator') == null) {
+            location.reload();
+        }
+    </script>
     <label for="brand" class="form-label">Drink Brand</label>
     <div class="d-flex" id="">     
         <select class="select2 form-control" name="drink_brand" id="drink_brand" aria-describedby="brandHelp">
@@ -9,4 +14,4 @@
         <button type="button" class="btn btn-secondary ml-2"  data-bs-toggle="modal" data-bs-target="#drink_brand_submit_modal">Add</button>                     
     </div>
     <div id="brandHelp" class="form-text">Select the brand of the drink you are submitting.</div>
-</span>
+</div>

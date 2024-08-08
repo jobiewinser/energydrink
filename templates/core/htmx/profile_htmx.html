@@ -20,7 +20,7 @@
                             <hr>
                             <div class="mb-2">
                                 <label for="title" class="form-label">Display Name</span></label>
-                                <input type="text" class="form-control" id="display_name" name="display_name" aria-describedby="display_name" value="{{profile.display_name}}">
+                                <input type="text" class="form-control" id="display_name" name="display_name" aria-describedby="display_name" {%if profile.display_name%}value="{{profile.display_name}}"{%endif%}>
                             </div>
 
                             <div class="mb-2">

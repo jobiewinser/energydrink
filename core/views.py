@@ -18,7 +18,7 @@ class HomeView(TemplateView):
     template_name = "core/home.html"
 
     def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
-        return redirect("search-drinks/")
+        return redirect("list-drinks")
 
 
 @method_decorator(login_required, name="dispatch")
@@ -26,6 +26,8 @@ class ProfileView(TemplateView):
     template_name = "core/profile.html"
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        if self.request.META.get("HTTP_HX_REQUEST", "false") == "true":
+            self.template_name = "core/htmx/profile_htmx.html"
         context = super().get_context_data(**kwargs)
         context["countries"] = dict(countries)
         context["currencies"] = coremodels.CURRENCY_CHOICES
@@ -38,6 +40,7 @@ class ProfileView(TemplateView):
             profile.currency = "GBP"
             profile.save()
         context["profile"] = profile
+        context["show_saved"] = self.request.GET.get("saved")
         return context
 
     def post(self, request, *args, **kwargs):
@@ -53,13 +56,19 @@ class ProfileView(TemplateView):
         profile.country = request.POST["country"]
         profile.currency = request.POST["currency"]
         profile.save()
-        context = self.get_context_data(**kwargs)
-        context["show_saved"] = True
-        return render(self.request, "core/htmx/profile_htmx.html", context)
+        response = HttpResponse(status=200)
+        response["HX-Redirect"] = f"/accounts/profile/?saved=true"
+        return response
 
 
 class RegisterView(TemplateView):
     template_name = "registration/register.html"
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        if self.request.META.get("HTTP_HX_REQUEST", "false") == "true":
+            self.template_name = "registration/htmx/register_htmx.html"
+        context = super().get_context_data(**kwargs)
+        return context
 
     def post(self, request, *args, **kwargs):
         email = request.POST["email"]
@@ -86,6 +95,12 @@ class RegisterView(TemplateView):
 
 class LoginView(TemplateView):
     template_name = "registration/login.html"
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        if self.request.META.get("HTTP_HX_REQUEST", "false") == "true":
+            self.template_name = "registration/htmx/login_htmx.html"
+        context = super().get_context_data(**kwargs)
+        return context
 
     def post(self, request, *args, **kwargs):
         email = request.POST["email"]
