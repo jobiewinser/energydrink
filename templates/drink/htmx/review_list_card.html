@@ -1,0 +1,65 @@
+{%load static%}
+{%load core_tags drink_tags%}
+<div class="row m-1">
+    <div class="col p-0">
+        <div class="card p-2">
+            <div class="row mb-2">
+                <div class="col">
+                    {%if review.title%}
+                    <h6 class="mb-1"><b>{{review.title}}</b></h6>
+                    {%else%}
+                    <h6><b>Untitled Review</b></h6>
+                    {%endif%}
+                    <h6 class="card-subtitle mb-2 text-muted">By {{ review.submitted_by }}</h6>
+                </div>
+                <div class="col-auto">
+                    <div class="taste-rating">
+                        <div class="row m-0 nowrap">
+                            <div class="col-auto nowrap pt-2 pe-2 ps-0" style="font-size:8px">
+                                {% for star in 0|range_tag:drink.average_taste %}
+                                <i class="fas fa-star yellow-star"></i>
+                                {% endfor %}
+                                {% for star in drink.average_taste|range_tag:10 %}
+                                <i class="fas fa-star grey-star"></i>
+                                {% endfor %}
+                            </div>
+                            <div class="col ps-0">
+                                <span class="card-text" style="font-size:13px">Taste</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="aftertaste-rating">
+                        <div class="row m-0 nowrap">
+                            <div class="col-auto nowrap pt-2 pe-2 ps-0" style="font-size:8px">
+                                {% for star in 0|range_tag:drink.average_aftertaste %}
+                                <i class="fas fa-star yellow-star"></i>
+                                {% endfor %}
+                                {% for star in drink.average_aftertaste|range_tag:10 %}
+                                <i class="fas fa-star grey-star"></i>
+                                {% endfor %}
+                            </div>
+                            <div class="col ps-0">
+                                <span class="card-text" style="font-size:13px">Aftertaste</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    {%if review.description%}
+                    <p>{{review.description}}</p>
+                    {%endif%}
+                </div>
+            </div>
+            {%if review.image%}
+            <div class="row">
+                <div class="col">
+                    <img src="{{ review.image.url }}" class="" alt="{{ drink.name }}" style="padding:6px; max-width:80px; max-height:80px; width: auto; height: auto;">
+                </div>
+            </div>
+            {%endif%}
+
+        </div>
+    </div>
+</div>

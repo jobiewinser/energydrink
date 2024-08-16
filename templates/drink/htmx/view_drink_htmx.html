@@ -71,8 +71,8 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="center mt-2">
                                 {%if request.user.id%}
-                                <div class="center mt-2">
                                     <a class="nowrap" href="#"
                                         hx-get="{% url 'review-drink' pk=drink.pk %}" hx-target="#content"
                                         hx-swap="innerHTML"
@@ -80,8 +80,12 @@
                                         hx-push-url="true">
                                         Review this drink
                                     </a>
-                                </div>
+                                {%else%}
+                                <a class="nowrap" href="/accounts/login/?next={% url 'review-drink' pk=drink.pk %}">
+                                    Login to Review
+                                </a>
                                 {%endif%}
+                            </div>
                             {%elif request.user.id%}
                             <div class="center mt-2">
                                 <a class="nowrap" href="#"

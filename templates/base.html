@@ -168,6 +168,7 @@
             };
 
             function setupStars(key, click_search=false) {
+                console.log("setupStars")
                 const stars = document.querySelectorAll('#'+key+'-panel .star');
                 const ratingValue = document.getElementById(key+'-value');
             
@@ -233,7 +234,7 @@
                         snackbarShow('Success!', 'success');
                         select2stuff();
                     }
-                    if (evt.detail.pathInfo.requestPath.includes('search-drinks')) {
+                    if (evt.detail.pathInfo.requestPath.includes('list-drinks')) {
                         setupStars('taste', click_search=true);
                         setupStars('aftertaste', click_search=true);
                     }

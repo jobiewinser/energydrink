@@ -63,7 +63,7 @@ class EditDrinkView(TemplateView):
         )
         if pk:
             matching_drinks = matching_drinks.exclude(pk=pk)
-        if not matching_drinks.exists():
+        if matching_drinks.exists():
             return HttpResponse("We already have a record of this drink", status=400)
         drink.save()
         context = {
@@ -119,7 +119,7 @@ class ReviewDrinkView(TemplateView):
         review.currency = currency
         review.save()
         response = HttpResponse(status=200)
-        response["HX-Redirect"] = f"/list-drinks/"
+        response["HX-Redirect"] = f"/reviews/{drink.pk}/"
         return response
 
 
@@ -131,7 +131,12 @@ class ReviewsView(TemplateView):
         if self.request.META.get("HTTP_HX_REQUEST", "false") == "true":
             self.template_name = "drink/htmx/reviews_htmx.html"
         context = super().get_context_data(**kwargs)
-        context["drink"] = drinkmodels.Drink.objects.get(pk=kwargs["pk"])
+        drink = drinkmodels.Drink.objects.get(pk=kwargs["pk"])
+        context["drink"] = drink
+        context["reviews"] = drink.review_drink.exclude(submitted_by=self.request.user)
+        context["user_reviews"] = drink.review_drink.filter(
+            submitted_by=self.request.user
+        )
         return context
 
 
@@ -173,7 +178,7 @@ def search_drinks(request):
     caffeine_per_hundred_ml = request.GET.get("caffeine_per_hundred_ml")
     sort = request.GET.get("sort")
     drink_brand = request.GET.get("drink_brand")
-    search = request.GET.get("search").strip()
+    search = (request.GET.get("search") or "").strip()
 
     # if request.user.id:
     #     context["unapproved_drinks"] = drinkmodels.Drink.objects.filter(

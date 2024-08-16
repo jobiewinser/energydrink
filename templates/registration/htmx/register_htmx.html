@@ -24,6 +24,9 @@
                 </div>
                 <button type="submit" class="form-control btn btn-success">Register</button>
                 {% csrf_token %}
+                {%if next%}
+                <input style="display: none" name="next" value="{{next}}">
+                {%endif%}
             </form>
         </div>
         <div class="col">

@@ -1,4 +1,10 @@
 {% extends 'base.html' %}
 {%block content%}   
+    <script>
+        $(document).ready(function() {
+            setupStars('taste', click_search=true);
+            setupStars('aftertaste', click_search=true);
+        });
+    </script>
     {%include 'drink/htmx/list_drinks_htmx.html'%}
 {%endblock content%}

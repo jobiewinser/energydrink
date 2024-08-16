@@ -57,7 +57,7 @@ class ProfileView(TemplateView):
         profile.currency = request.POST["currency"]
         profile.save()
         response = HttpResponse(status=200)
-        response["HX-Redirect"] = f"/accounts/profile/?saved=true"
+        response["HX-Redirect"] = "/accounts/profile/?saved=true"
         return response
 
 
@@ -68,6 +68,7 @@ class RegisterView(TemplateView):
         if self.request.META.get("HTTP_HX_REQUEST", "false") == "true":
             self.template_name = "registration/htmx/register_htmx.html"
         context = super().get_context_data(**kwargs)
+        context["next"] = self.request.GET.get("next")
         return context
 
     def post(self, request, *args, **kwargs):
@@ -89,7 +90,7 @@ class RegisterView(TemplateView):
         user = User.objects.create_user(email, email=email, password=password)
         login(request, user)
         response = HttpResponse(status=200)
-        response["HX-Redirect"] = f"/accounts/profile/"
+        response["HX-Redirect"] = request.POST.get("next") or "/accounts/profile/"
         return response
 
 
@@ -109,7 +110,7 @@ class LoginView(TemplateView):
         if user and user.check_password(password):
             login(request, user)
             response = HttpResponse(status=200)
-            response["HX-Redirect"] = f"/accounts/profile/"
+            response["HX-Redirect"] = request.POST.get("next") or "/accounts/profile/"
             return response
         response = HttpResponse("Incorrect Email or Password", status=401)
         return response

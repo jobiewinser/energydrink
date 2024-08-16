@@ -24,13 +24,15 @@
                     </div>
                     <div class="col">
                         <a class="btn btn-secondary" href="#"
-                            hx-get="{%url 'register'%}" hx-target="#content"
+                            hx-get="{%url 'register'%}{%if next%}?next={{next}}{%endif%}" hx-target="#content"
                             hx-swap="innerHTML"
                             hx-indicator="#page_load_indicator"
                             hx-push-url="true">Register</a>
                     </div>
                 </div>
-
+                {%if next%}
+                <input style="display: none" name="next" value="{{next}}">
+                {%endif%}
                 {% csrf_token %}
             </form>
         </div>
