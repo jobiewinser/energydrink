@@ -131,10 +131,13 @@ class ReviewsView(TemplateView):
         context = super().get_context_data(**kwargs)
         drink = drinkmodels.Drink.objects.get(pk=kwargs["pk"])
         context["drink"] = drink
-        context["reviews"] = drink.review_drink.exclude(submitted_by=self.request.user)
-        context["user_reviews"] = drink.review_drink.filter(
-            submitted_by=self.request.user
-        )
+        context["reviews"] = drink.review_drink.all()
+        context["user_reviews"] = drink.review_drink.all()
+        if self.request.user.is_authenticated:
+            context["reviews"] = context["reviews"].exclude(submitted_by=self.request.user)
+            context["user_reviews"] = context["user_reviews"].filter(
+                submitted_by=self.request.user
+            )
         return context
 
 
@@ -154,6 +157,8 @@ class ListDrinksView(TemplateView):
                 view = "gallery"
         context["view"] = view
         context["drink_brands"] = drinkmodels.DrinkBrand.objects.all()
+        context["show_filters"] = self.request.GET.get("show_filters") == "true"
+
         return context
 
 

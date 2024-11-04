@@ -25,7 +25,14 @@
                             <div class="row m-0">
                                 <div class="col center">
                                     <h5 class="card-title elipses-overflow pb-1">{{ drink.name }}</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted elipses-overflow">{{ drink.drink_brand.name }}</h6>
+                                    
+                                    <a class="nowrap" href="#"
+                                        hx-get="{%url 'list-drinks'%}?drink_brand={{drink.drink_brand.pk}}&show_filters=true" hx-target="#content"
+                                        hx-swap="innerHTML"
+                                        hx-indicator="#page_load_indicator"
+                                        hx-push-url="true"><h6 class="card-subtitle mb-2 text-muted elipses-overflow hover-link">{{ drink.drink_brand.name }}</h6>
+                                    </a>
+                                        
                                 </div>
                             </div>
                             <div class="row m-0">

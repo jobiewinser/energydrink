@@ -53,8 +53,13 @@
                         </div>
                     </div>   
                     <div class="row mt-1">
-                        <div class="col elipses-overflow">
-                            <h6 class="card-subtitle text-muted">{{ drink.drink_brand.name }}</h6>
+                        <div class="col elipses-overflow">                            
+                            <a class="nowrap" href="#"
+                                hx-get="{%url 'search-drinks'%}?drink_brand={{drink.drink_brand.pk}}&show_filters=true" hx-target="#search-drinks-content"
+                                hx-swap="innerHTML"
+                                hx-indicator="#page_load_indicator"
+                                hx-push-url="true"><h6 class="card-subtitle text-muted hover-link">{{ drink.drink_brand.name }}</h6>
+                            </a>                            
                         </div>
                         <div class="col-auto me-2">
                             <h6 class="card-subtitle text-muted">{% if drink.caffeine_per_hundred_ml is not None %}{{ drink.caffeine_per_hundred_ml|round_tag:0 }}{% else %}?{% endif %} <span class="text-black-50" style="font-size:12px">mg/100ml</span></h6>
