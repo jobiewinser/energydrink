@@ -2,7 +2,7 @@ import drink.models as drinkmodels
 from django.db.models import Q, Count
 from typing import Any
 from django.views.generic import TemplateView
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -96,7 +96,6 @@ class ReviewDrinkView(TemplateView):
             return HttpResponse("Please rate the Taste", status=400)
         pk = kwargs["pk"]
         drink = drinkmodels.Drink.objects.get(pk=pk)
-        aftertaste = request.POST["aftertaste"] or None
         title = (request.POST["title"] or "").strip()
         description = (request.POST["description"] or "").strip()
         country_purchased = request.POST["country_purchased"] or None
@@ -110,7 +109,6 @@ class ReviewDrinkView(TemplateView):
         )
 
         review.taste = taste
-        review.aftertaste = aftertaste
         review.title = title
         review.description = description
         review.image = image
@@ -163,7 +161,17 @@ def search_drinks(request):
     context = {}
 
     if request.META.get("HTTP_HX_REQUEST", "false") == "false":
-        return redirect("list-drinks")
+        # Extract all query parameters
+        query_dict = request.GET
+
+        # Reverse the URL for the list-drinks view
+        list_drinks_url = reverse("list-drinks")
+
+        # Add the query parameters to the URL
+        url_with_params = f"{list_drinks_url}?{query_dict.urlencode()}"
+
+        # Redirect to the constructed URL
+        return redirect(url_with_params)
     view = request.GET.get("view")
     if not view:
         is_mobile = request.user_agent.is_mobile
@@ -174,7 +182,6 @@ def search_drinks(request):
     context["view"] = view
     template_name = f"drink/htmx/search_drinks_{view}_htmx.html"
     taste = request.GET.get("taste")
-    aftertaste = request.GET.get("aftertaste")
     caffeine_per_hundred_ml = request.GET.get("caffeine_per_hundred_ml")
     sort = request.GET.get("sort")
     drink_brand = request.GET.get("drink_brand")
@@ -189,8 +196,6 @@ def search_drinks(request):
         drinks = drinks.filter(approved=True)
     if taste:
         drinks = drinks.filter(average_taste__gte=taste)
-    if aftertaste:
-        drinks = drinks.filter(average_aftertaste__gte=aftertaste)
     if caffeine_per_hundred_ml:
         drinks = drinks.filter(caffeine_per_hundred_ml__gte=caffeine_per_hundred_ml)
     if sort:

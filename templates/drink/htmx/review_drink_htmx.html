@@ -14,11 +14,19 @@
                     <div class="col center">
                         <div class="card">
                             <div class="center">
-                                {%if drink.image%}
-                                <img src="{{ drink.image.url }}" class="card-img-top review-img" alt="{{ drink.name }}">
-                                {%else%}
-                                <img src="{%static 'img/coming-soon.jpg'%}" class="card-img-top review-img">
-                                {%endif%}
+                                <a
+                                    href="{%url 'view-drink' pk=drink.pk%}" 
+                                    hx-get="{%url 'view-drink' pk=drink.pk%}" 
+                                    hx-target="#content"
+                                    hx-swap="innerHTML"
+                                    hx-indicator="#page_load_indicator"
+                                    hx-push-url="true">
+                                    {%if drink.image%}
+                                    <img src="{{ drink.image.url }}" class="card-img-top" alt="{{ drink.name }}" style="padding:6px; max-width:180px; max-height:180px; width: auto; height: auto;">
+                                    {%else%}
+                                    <img src="{%static 'img/mystery-can.webp'%}" class="card-img-top" style="padding:6px; max-width:180px; max-height:180px; width: auto; height: auto;">
+                                    {%endif%}
+                                </a>
                             </div>
                             <div class="card-body">
                                 <div class="row m-0">
@@ -27,7 +35,12 @@
                                     <div class="col-auto">
                                         <div class="row m-0">
                                             <div class="col center">
-                                                <h5 class="card-title elipses-overflow pb-1">{{ drink.name }}</h5>
+                                                <a href="{%url 'view-drink' pk=drink.pk%}" hx-get="{%url 'view-drink' pk=drink.pk%}" hx-target="#content"
+                                                    hx-swap="innerHTML"
+                                                    hx-indicator="#page_load_indicator"
+                                                    hx-push-url="true">
+                                                    <h5 class="card-title elipses-overflow pb-1 hover-link">{{ drink.name }}</h5>
+                                                </a>
                                                 <h6 class="card-subtitle mb-2 text-muted elipses-overflow">{{ drink.drink_brand.name }}</h6>
                                             </div>
                                         </div>
@@ -85,32 +98,7 @@
                                 <input type="hidden" id="taste-value" name="taste" {%if review.taste%}value="{{review.taste}}"{%endif%}>
                                 <div id="description_help" class="form-text">How good is the taste of the drink.</div>
                             </div>
-
-                            <div class="mb-3" id="aftertaste-panel">
-                                <label for="title" class="form-label mb-0">Aftertaste <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>                
-                                <div class="row">
-                                    <div class="col">
-                                    </div>
-                                    <div class="col-auto nowrap">
-                                        <div class="star-rating">
-                                            <span class="star" data-rating="1"><i class="fas fa-star input-star"></i></span>
-                                            <span class="star" data-rating="2"><i class="fas fa-star input-star"></i></span>
-                                            <span class="star" data-rating="3"><i class="fas fa-star input-star"></i></span>
-                                            <span class="star" data-rating="4"><i class="fas fa-star input-star"></i></span>
-                                            <span class="star" data-rating="5"><i class="fas fa-star input-star"></i></span>
-                                            <span class="star" data-rating="6"><i class="fas fa-star input-star"></i></span>
-                                            <span class="star" data-rating="7"><i class="fas fa-star input-star"></i></span>
-                                            <span class="star" data-rating="8"><i class="fas fa-star input-star"></i></span>
-                                            <span class="star" data-rating="9"><i class="fas fa-star input-star"></i></span>
-                                            <span class="star" data-rating="10"><i class="fas fa-star input-star"></i></span>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                    </div>
-                                </div>
-                                <input type="hidden" id="aftertaste-value" name="aftertaste" {%if review.aftertaste%}value="{{review.aftertaste}}"{%endif%}>
-                                <div id="description_help" class="form-text">How good is the aftertaste of the drink.</div>
-                            </div>
+                            
                             <hr>
                             <div class="collapse" id="advanced-review-panel">
                                 <div class="mb-3">

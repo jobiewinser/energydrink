@@ -1,3 +1,4 @@
+import os
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
@@ -11,10 +12,6 @@ def save_average_drink_reviews(drink):
     avrg_taste = drink.review_drink.aggregate(Avg("taste"))["taste__avg"]
     drink.average_taste = round(avrg_taste if avrg_taste is not None else 0, 0)
 
-    avrg_aftertaste = drink.review_drink.aggregate(Avg("aftertaste"))["aftertaste__avg"]
-    drink.average_aftertaste = round(
-        avrg_aftertaste if avrg_aftertaste is not None else 0, 0
-    )
     drink.save(calculate_average_reviews=False)
 
 
@@ -35,6 +32,11 @@ class DrinkBrand(models.Model):
         related_name="drink_brand_approved_by",
     )
     approved = models.BooleanField(default=False, blank=True)
+
+
+def drink_file_name(instance, filename):
+    filename = "%s_%s" % (instance.id, filename)
+    return os.path.join("drinks", filename)
 
 
 class Drink(models.Model):
@@ -60,9 +62,8 @@ class Drink(models.Model):
         blank=True,
         related_name="drink_approved_by",
     )
-    image = models.ImageField(default="default.png", upload_to="drinks")
+    image = models.ImageField(default="default.png", upload_to=drink_file_name)
     average_taste = models.IntegerField(null=False, blank=True, default=0)
-    average_aftertaste = models.IntegerField(null=False, blank=True, default=0)
     caffeine_per_hundred_ml = models.DecimalField(
         max_digits=6,
         decimal_places=2,
@@ -98,7 +99,6 @@ class Review(models.Model):
         related_name="review_submitted_by",
     )
     taste = models.IntegerField(null=False, blank=True, default=0)
-    aftertaste = models.IntegerField(null=False, blank=True, default=0)
     title = models.TextField(
         null=True,
         blank=True,

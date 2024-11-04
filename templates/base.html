@@ -140,6 +140,10 @@
             .hover-link:hover {
                 color:purple;
             }
+            a {
+                color: inherit; /* blue colors for links too */
+                text-decoration: inherit; /* no underline */
+            }
         </style>
         <script>
             $(document).ready(function() {
@@ -236,11 +240,9 @@
                     }
                     if (evt.detail.pathInfo.requestPath.includes('list-drinks')) {
                         setupStars('taste', click_search=true);
-                        setupStars('aftertaste', click_search=true);
                     }
                     if (evt.detail.pathInfo.requestPath.includes('review-drink')) {
                         setupStars('taste', click_search=false);
-                        setupStars('aftertaste', click_search=false);
                     }
                 }
             };

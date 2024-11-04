@@ -18,7 +18,7 @@
                     {% if drink.image %}
                     <img src="{{ drink.image.url }}" class="card-img-top drink-img" alt="{{ drink.name }}" style="padding:3px; width:50px; height:85px;">
                     {% else %}
-                    <img src="{% static 'img/coming-soon.jpg' %}" class="card-img-top drink-img" style="padding:3px; width:45px; height:85px;">
+                    <img src="{% static 'img/mystery-can.webp' %}" class="card-img-top drink-img" style="padding:3px; width:45px; height:85px;">
                     {% endif %}
                 </div>
             </div>
@@ -71,23 +71,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div> 
-                            <div class="row my-1 nowrap">
-                                <div class="col ps-1 pe-1">
-                                    <div class="aftertaste-rating nowrap center">
-                                        <div class="nowrap pe-2 ps-0">
-                                            <span class="card-text" style="font-size:11px">Average Aftertaste</span>
-                                            <br>
-                                            {% for star in 0|range_tag:drink.average_aftertaste %}
-                                            <i class="fas fa-star yellow-star display-star"></i>
-                                            {% endfor %}
-                                            {% for star in drink.average_aftertaste|range_tag:10 %}
-                                            <i class="fas fa-star grey-star display-star"></i>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>  
+                            </div>
                         </div>  
                     </div>                    
                 </div>

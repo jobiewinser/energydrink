@@ -8,16 +8,20 @@
     {% for drink in drinks %}
     <div class="col-auto mb-3">
         <div class="card" style="height:320px; width:230px;">
-            <div class="center pointer" 
-                hx-get="{%url 'view-drink' pk=drink.pk%}" hx-target="#content"
-                hx-swap="innerHTML"
-                hx-indicator="#page_load_indicator"
-                hx-push-url="true">
-                {%if drink.image%}
-                <img src="{{ drink.image.url }}" class="card-img-top" alt="{{ drink.name }}" style="padding:6px; max-width:180px; max-height:180px; width: auto; height: auto;">
-                {%else%}
-                <img src="{%static 'img/coming-soon.jpg'%}" class="card-img-top" style="padding:6px; max-width:180px; max-height:180px; width: auto; height: auto;">
-                {%endif%}
+            <div class="center">
+                <a
+                    href="{%url 'view-drink' pk=drink.pk%}" 
+                    hx-get="{%url 'view-drink' pk=drink.pk%}" 
+                    hx-target="#content"
+                    hx-swap="innerHTML"
+                    hx-indicator="#page_load_indicator"
+                    hx-push-url="true">
+                    {%if drink.image%}
+                    <img src="{{ drink.image.url }}" class="card-img-top" alt="{{ drink.name }}" style="padding:6px; max-width:180px; max-height:180px; width: auto; height: auto;">
+                    {%else%}
+                    <img src="{%static 'img/mystery-can.webp'%}" class="card-img-top" style="padding:6px; max-width:180px; max-height:180px; width: auto; height: auto;">
+                    {%endif%}
+                </a>
             </div>
             <div class="card-body">
                 <div class="row m-0">
@@ -26,12 +30,12 @@
                     <div class="col-auto p-0">
                         <div class="row m-0">
                             <div class="col center">
-                                <span href="#" hx-get="{%url 'view-drink' pk=drink.pk%}" hx-target="#content"
+                                <a href="{%url 'view-drink' pk=drink.pk%}" hx-get="{%url 'view-drink' pk=drink.pk%}" hx-target="#content"
                                     hx-swap="innerHTML"
                                     hx-indicator="#page_load_indicator"
                                     hx-push-url="true">
                                     <h5 class="card-title elipses-overflow pb-1 hover-link">{{ drink.name }}</h5>
-                                </span>
+                                </a>
                                 <h6 class="card-subtitle mb-2 text-muted elipses-overflow">{{ drink.drink_brand.name }}</h6>
                             </div>
                         </div>
@@ -40,7 +44,7 @@
                                 <p class="card-text mb-0" style="font-size:13px">{%if drink.caffeine_per_hundred_ml is not None%}{{ drink.caffeine_per_hundred_ml|round_tag:0 }}{%else%}?{%endif%} <span class="text-black-50" style="font-size:12px">mg/100ml</span></p>
                             </div>
                             <div class="col p-0 ps-1 nowrap">
-                                <a href="#"
+                                <a href="{%url 'reviews' pk=drink.pk%}"
                                     hx-get="{%url 'reviews' pk=drink.pk%}" hx-target="#content"
                                     hx-swap="innerHTML"
                                     hx-indicator="#page_load_indicator"
@@ -60,21 +64,6 @@
                                 </div>
                                 <div class="col ps-0">
                                     <span class="card-text" style="font-size:13px">Taste</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="aftertaste-rating">
-                            <div class="row m-0">
-                                <div class="col-auto nowrap pt-2 pe-2 ps-0" style="font-size:8px">
-                                    {% for star in 0|range_tag:drink.average_aftertaste %}
-                                    <i class="fas fa-star yellow-star"></i>
-                                    {% endfor %}
-                                    {% for star in drink.average_aftertaste|range_tag:10 %}
-                                    <i class="fas fa-star grey-star"></i>
-                                    {% endfor %}
-                                </div>
-                                <div class="col ps-0">
-                                    <span class="card-text" style="font-size:13px">Aftertaste</span>
                                 </div>
                             </div>
                         </div>

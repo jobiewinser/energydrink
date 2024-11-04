@@ -95,25 +95,6 @@
                     </div>
                     <hr>
 
-                    <div class="mb-3" id="aftertaste-panel">
-                        <label for="title" class="form-label mb-0">Aftertaste</label>                
-                        <div class="star-rating" style="font-size: 10px">
-                            <span class="star" data-rating="1"><i class="fas fa-star"></i></span>
-                            <span class="star" data-rating="2"><i class="fas fa-star"></i></span>
-                            <span class="star" data-rating="3"><i class="fas fa-star"></i></span>
-                            <span class="star" data-rating="4"><i class="fas fa-star"></i></span>
-                            <span class="star" data-rating="5"><i class="fas fa-star"></i></span>
-                            <span class="star" data-rating="6"><i class="fas fa-star"></i></span>
-                            <span class="star" data-rating="7"><i class="fas fa-star"></i></span>
-                            <span class="star" data-rating="8"><i class="fas fa-star"></i></span>
-                            <span class="star" data-rating="9"><i class="fas fa-star"></i></span>
-                            <span class="star" data-rating="10"><i class="fas fa-star"></i></span>
-                        </div>
-                        <input type="hidden" class="search-drinks-param" id="aftertaste-value" name="aftertaste" 
-                        {%if request.GET.aftertaste%}value="{{request.GET.aftertaste}}"{%endif%}>
-                    </div>
-                    <hr>
-
                     <div class="mb-3" id="caffeine-panel">
                         <label for="title" class="form-label mb-0">Caffeine <span class="text-black-50" style="font-size:12px">mg/100ml</span></label>
                         <input type="number" class="form-control form-control-sm search-drinks-param" id="caffeine-value" name="caffeine_per_hundred_ml" 
@@ -150,8 +131,6 @@
                                 <option {%if request.GET.sort == '-review_drink__count' or not request.GET.sort%}selected{%endif%} value="-review_drink__count">Number of Reviews - ↓</option>
                                 <option {%if request.GET.sort == 'average_taste'%}selected{%endif%} value="average_taste">Average Taste - ↑</option>
                                 <option {%if request.GET.sort == '-average_taste'%}selected{%endif%} value="-average_taste">Average Taste - ↓</option>
-                                <option {%if request.GET.sort == 'average_aftertaste'%}selected{%endif%} value="average_aftertaste">Average Aftertaste - ↑</option>
-                                <option {%if request.GET.sort == '-average_aftertaste'%}selected{%endif%} value="-average_aftertaste">Average Aftertaste - ↓</option>
                                 <option {%if request.GET.sort == 'name'%}selected{%endif%} value="name">Name - ↑</option>
                                 <option {%if request.GET.sort == '-name'%}selected{%endif%} value="-name">Name - ↓</option>
                                 <option {%if request.GET.sort == 'drink_brand__name'%}selected{%endif%} value="drink_brand__name">Brand Name - ↑</option>
