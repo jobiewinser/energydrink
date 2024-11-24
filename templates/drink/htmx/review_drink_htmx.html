@@ -13,7 +13,7 @@
                 <div class="row">
                     <div class="col center">
                         <div class="card">
-                            <div class="center">
+                            <div class="center image-container image-container-hover">
                                 <a
                                     href="{%url 'view-drink' pk=drink.pk%}" 
                                     hx-get="{%url 'view-drink' pk=drink.pk%}" 
@@ -43,18 +43,18 @@
                                                 </a>
                                             
                                                 <a class="nowrap" href="#"
-                                                    hx-get="{%url 'list-drinks'%}?drink_brand={{drink.drink_brand.pk}}&show_filters=true" hx-target="#content"
+                                                    hx-get="{%url 'list-drinks'%}?brand={{drink.brand.pk}}&show_filters=true" hx-target="#content"
                                                     hx-swap="innerHTML"
                                                     hx-indicator="#page_load_indicator"
                                                     hx-push-url="true">
-                                                    <h6 class="card-subtitle mb-2 text-muted elipses-overflow hover-link">{{ drink.drink_brand.name }}</h6>
+                                                    <h6 class="card-subtitle mb-2 text-muted elipses-overflow hover-link">{{ drink.brand.name }}</h6>
                                                 </a>
                                                         
                                             </div>
                                         </div>
                                         <div class="row m-0">
                                             <div class="col p-0 pe-1 right nowrap">
-                                                <p class="card-text mb-0" style="font-size:13px">{%if drink.caffeine_per_hundred_ml is not None%}{{ drink.caffeine_per_hundred_ml|round_tag:0 }}{%else%}?{%endif%} <span class="text-black-50" style="font-size:12px">mg/100ml</span></p>
+                                                <p class="card-text mb-0" style="font-size:13px">{%if drink.caffeine_per_hundred_ml is not None%}{{ drink.caffeine_per_hundred_ml|round_tag:0 }}{%else%}?{%endif%} <span class="text-50" style="font-size:12px">mg/100ml</span></p>
                                             </div>
                                             <div class="col p-0 ps-1 nowrap">
                                                 <a href="#"
@@ -110,17 +110,17 @@
                             <hr>
                             <div class="collapse" id="advanced-review-panel">
                                 <div class="mb-3">
-                                    <label for="title" class="form-label">Review Title <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
+                                    <label for="title" class="form-label">Review Title <span class="text-50" style="font-size:12px"> (Optional)</span></label>
                                     <input type="text" class="form-control" id="title" name="title" aria-describedby="title" {%if review.title%}value="{{review.title}}"{%endif%}>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="description" class="form-label">Description <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
+                                    <label for="description" class="form-label">Description <span class="text-50" style="font-size:12px"> (Optional)</span></label>
                                     <textarea type="text" class="form-control" id="description" name="description" aria-describedby="description">{%if review.description%}{{review.description}}{%endif%}</textarea>
                                     <div id="description_help" class="form-text">Describe how the drinks tastes.</div>
                                 </div>
                                 <div class="mb-3 row nowrap-col">
                                     <div class="col-auto">
-                                        <label for="currency" class="form-label nowrap">Currency <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
+                                        <label for="currency" class="form-label nowrap">Currency <span class="text-50" style="font-size:12px"> (Optional)</span></label>
                                         <select class="select2 form-control" name="currency" id="currency" aria-describedby="currency">
                                             {%if review%}
                                                 {% for currency in currencies %}
@@ -134,16 +134,16 @@
                                         </select>
                                     </div>
                                     <div class="col">
-                                        <label for="price_paid" class="form-label nowrap">Price <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
+                                        <label for="price_paid" class="form-label nowrap">Price <span class="text-50" style="font-size:12px"> (Optional)</span></label>
                                         <input type="number" class="form-control" id="price_paid" name="price_paid" aria-describedby="price_paid" min="0" step="0.01"  {%if review.price_paid%}value="{{review.price_paid}}"{%endif%}/>
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="drink_name" class="form-label">Image <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
+                                    <label for="drink_name" class="form-label">Image <span class="text-50" style="font-size:12px"> (Optional)</span></label>
                                     <input name="image" placeholder="image" type="file" class="form-control modify_user_input" id="review-file" />
                                 </div>
                                 <div class="mb-3">
-                                    <label for="drink_name" class="form-label">Country Purchased <span class="text-black-50" style="font-size:12px"> (Optional)</span></label>
+                                    <label for="drink_name" class="form-label">Country Purchased <span class="text-50" style="font-size:12px"> (Optional)</span></label>
                                     <select class="select2 form-control" name="country_purchased" id="country_purchased" aria-describedby="country">
                                         {%if review%}
                                             {% for country_code, country in countries.items %}

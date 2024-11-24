@@ -1,0 +1,80 @@
+{%load static core_tags drink_tags%}
+<div style="min-width: 230px">
+    <div class="row m-0">
+        <div class="col center">
+            <h5 class="card-title elipses-overflow pb-1">{{ drink.name }}</h5>
+            
+            <a class="nowrap" href="#"
+                hx-get="{%url 'list-drinks'%}?brand={{drink.brand.pk}}&show_filters=true" hx-target="#content"
+                hx-swap="innerHTML"
+                hx-indicator="#page_load_indicator"
+                hx-push-url="true"><h6 class="card-subtitle mb-2 text-muted elipses-overflow hover-link">{{ drink.brand.name }}</h6>
+            </a>
+                
+        </div>
+    </div>
+
+    <div class="row m-0">
+        <div class="col p-0 pe-2 right nowrap">
+            <p class="card-text mb-0" style="font-size:13px">{%if drink.calories_per_hundred_ml is not None%}{{ drink.calories_per_hundred_ml|round_tag:0 }}{%else%}?{%endif%} <span class="text-50" style="font-size:12px">kcal/100ml</span></p>
+        </div>
+        <div class="col p-0 ps-2 nowrap">
+            <p class="card-text mb-0" style="font-size:13px">{%if drink.caffeine_per_hundred_ml is not None%}{{ drink.caffeine_per_hundred_ml|round_tag:0 }}{%else%}?{%endif%} <span class="text-50" style="font-size:12px">mg/100ml</span></p>
+        </div>
+    </div>
+    {%if drink.review_drink.exists%}
+    <div class="row m-0 mt-1">
+        <div class="col nowrap">
+            {% for star in 0|range_tag:drink.average_taste %}
+            <i class="fas fa-star yellow-star"></i>
+            {% endfor %}
+            {% for star in drink.average_taste|range_tag:10 %}
+            <i class="fas fa-star grey-star"></i>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row m-0">
+        <div class="col center nowrap">
+            <a class="btn btn-xs btn-light nowrap" href="#"
+                hx-get="{%url 'reviews' pk=drink.pk%}" hx-target="#content"
+                hx-swap="innerHTML"
+                hx-indicator="#page_load_indicator"
+                hx-push-url="true">{{drink.review_drink.count}} Review{%if not drink.review_drink.count == 1%}s{%endif%}</a>
+        </div>
+    </div>
+    {%endif%}
+    <div class="row m-0 mt-1 nowrap">
+        <div class="col p-0">
+        </div>
+        <div class="col-auto nowrap">
+            {%if request.user.id%}
+                <a class="btn btn-xs btn-primary" href="#"
+                    hx-get="{% url 'review-drink' pk=drink.pk %}" hx-target="#content"
+                    hx-swap="innerHTML"
+                    hx-indicator="#page_load_indicator"
+                    hx-push-url="true">
+                    {%if drink.review_drink.exists%}
+                    Review this drink
+                    {%else%}
+                    Be the first to review
+                    {%endif%}
+                </a>
+            {%else%}
+            <a class="nowrap btn btn-xs btn-primary" href="/accounts/login/?next={% url 'review-drink' pk=drink.pk %}">
+                Login to Review
+            </a>
+            {%endif%}
+        </div>
+        {%if user.is_superuser%}
+        <div class="col-auto nowrap pe-0">
+            <a class="btn btn-xs btn-success" href="#"
+                hx-get="{%url 'edit-drink' pk=drink.pk%}" hx-target="#content"
+                hx-swap="innerHTML"
+                hx-indicator="#page_load_indicator"
+                hx-push-url="true">Edit Drink</a>
+        </div>
+        {%endif%}
+        <div class="col p-0">
+        </div>
+    </div>
+</div>

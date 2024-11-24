@@ -5,7 +5,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-CURRENCY_CHOICES = [
+CURRENCIES = [
     ("AED", "United Arab Emirates Dirham (د.إ)"),
     ("AFN", "Afghan Afghani (؋)"),
     ("ALL", "Albanian Lek (L)"),
@@ -168,9 +168,14 @@ CURRENCY_CHOICES = [
     ("ZWL", "Zimbabwean Dollar ($)"),
 ]
 
+CONTAINER_TYPES = [
+    ("can", "Can"),
+    ("bottle", "Bottle"),
+    ("carton", "Carton"),
+]
 
 class Profile(models.Model):
-    PROFILE_CURRENCY_CHOICES = CURRENCY_CHOICES
+    PROFILE_CURRENCIES = CURRENCIES
     admin = models.BooleanField(default=False, blank=True)
     created = models.DateTimeField(
         auto_now_add=True,
@@ -189,7 +194,7 @@ class Profile(models.Model):
         null=True,
         blank=True,
     )
-    theme = models.CharField(max_length=10, default="light", blank=True)
+    theme = models.CharField(max_length=10, default="dark", blank=True)
     # city = models.ForeignKey(
     #     "core.City",
     #     on_delete=models.SET_NULL,
@@ -198,7 +203,7 @@ class Profile(models.Model):
     # )
     display_name = models.TextField(blank=True, null=True)
     country = CountryField(blank_label="(select country)", blank=True, null=True)
-    currency = models.CharField(choices=PROFILE_CURRENCY_CHOICES, blank=True, null=True)
+    currency = models.CharField(choices=PROFILE_CURRENCIES, blank=True, null=True)
 
 
 # class City(models.Model):

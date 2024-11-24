@@ -6,82 +6,100 @@
             location.reload();
         }
     </script>
-    <div class="row border m-1 align-items-center nowrap">
-        <div class="col-auto mx-1 pointer"
-            hx-get="{%url 'view-drink' pk=drink.pk%}" hx-target="#content"
-            hx-swap="innerHTML"
-            hx-indicator="#page_load_indicator"
-            hx-push-url="true"
-            hx-trigger="click">
-            <div class="d-flex align-items-center" style="height:85px">
-                <div class="center">
-                    {% if drink.image %}
-                    <img src="{{ drink.image.url }}" class="card-img-top drink-img" alt="{{ drink.name }}" style="padding:3px; width:50px; height:85px;">
-                    {% else %}
-                    <img src="{% static 'img/mystery-can.webp' %}" class="card-img-top drink-img" style="padding:3px; width:45px; height:85px;">
-                    {% endif %}
-                </div>
-            </div>
+    <div class="row">
+        <div class="col">
+
         </div>
-        <div class="col px-1">
-            <div class="d-flex align-items-center" >
-                <div class="card-body">  
-                    <div class="row">
-                        <div class="col-auto pointer"
-                            hx-get="{%url 'view-drink' pk=drink.pk%}" hx-target="#content"
-                            hx-swap="innerHTML"
-                            hx-indicator="#page_load_indicator"
-                            hx-push-url="true"
-                            hx-trigger="click">
-                            <div class="row mt-4 nowrap">
-                                <div class="col">
-                                    <h5 class="card-title elipses-overflow pb-1">{{ drink.name }}</h5>
-                                </div>
-                            </div>   
-                            <div class="row mt-1 nowrap">
-                                <div class="col">
-                                    <h6 class="card-subtitle mb-2 text-muted elipses-overflow">{{ drink.drink_brand.name }}</h6>
-                                </div>
-                            </div>  
-                            {%if not drink.review_drink.exists and request.user.id%}
+        <div class="col-auto">
+            <div class="row card-body m-1 align-items-center nowrap">
+                <div class="col-auto mx-1 pointer"
+                    hx-get="{%url 'view-drink' pk=drink.pk%}" hx-target="#content"
+                    hx-swap="innerHTML"
+                    hx-indicator="#page_load_indicator"
+                    hx-push-url="true"
+                    hx-trigger="click">
+                    <div class="d-flex align-items-center" style="height:85px">
+                        <div class="center image-container image-container-hover">
+                            {% if drink.image %}
+                            <img src="{{ drink.image.url }}" class="card-img-top drink-img" alt="{{ drink.name }}" style="padding:3px; width:50px; height:85px;">
+                            {% else %}
+                            <img src="{% static 'img/mystery-can.webp' %}" class="card-img-top drink-img" style="padding:3px; width:45px; height:85px;">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col px-1">
+                    <div class="d-flex align-items-center" >
+                        <div class="row m-0">
+                            <div class="col-auto pointer"
+                                hx-get="{%url 'view-drink' pk=drink.pk%}" hx-target="#content"
+                                hx-swap="innerHTML"
+                                hx-indicator="#page_load_indicator"
+                                hx-push-url="true"
+                                hx-trigger="click">
+                                <div class="row mt-4 nowrap">
+                                    <div class="col">
+                                        <h5 class="card-title elipses-overflow pb-1">{{ drink.name }}</h5>
+                                    </div>
+                                </div>   
                                 <div class="row mt-1 nowrap">
                                     <div class="col">
-                                        <a href="#"
-                                            hx-get="{%url 'review-drink' pk=drink.pk%}" hx-target="#content"
-                                            hx-swap="innerHTML"
-                                            hx-indicator="#page_load_indicator"
-                                            hx-push-url="true" class="nowrap">Be the first to review!</a>
+                                        <h6 class="card-subtitle mb-2 text-muted elipses-overflow">{{ drink.brand.name }}</h6>
                                     </div>
                                 </div>  
-                            {%endif%}
-                        </div>  
-                        <div class="col">
-                            <div class="row mt-1 nowrap">
-                                <div class="col border-end ps-1 pe-0">
-                                    <div class="taste-rating nowrap center">
-                                        <div class="nowrap pe-2 ps-0">
-                                            <span class="card-text" style="font-size:11px">Average Taste</span>
-                                            <br>
-                                            {% for star in 0|range_tag:drink.average_taste %}
-                                            <i class="fas fa-star yellow-star display-star"></i>
-                                            {% endfor %}
-                                            {% for star in drink.average_taste|range_tag:10 %}
-                                            <i class="fas fa-star grey-star display-star"></i>
-                                            {% endfor %}
+                                {%if not drink.review_drink.exists and request.user.id%}
+                                    <div class="row mt-1 nowrap">
+                                        <div class="col">
+                                            <a href="#"
+                                                hx-get="{%url 'review-drink' pk=drink.pk%}" hx-target="#content"
+                                                hx-swap="innerHTML"
+                                                hx-indicator="#page_load_indicator"
+                                                hx-push-url="true" class="nowrap">Be the first to review!</a>
+                                        </div>
+                                    </div>  
+                                {%endif%}
+                            </div>  
+                            <div class="col">
+                                <div class="row mt-1 nowrap">
+                                    <div class="col ps-1 pe-0">
+                                        <div class="taste-rating nowrap center">
+                                            <div class="nowrap pe-2 ps-0">
+                                                <span class="card-text" style="font-size:11px">Average Taste</span>
+                                                <br>
+                                                {% for star in 0|range_tag:drink.average_taste %}
+                                                <i class="fas fa-star yellow-star display-star"></i>
+                                                {% endfor %}
+                                                {% for star in drink.average_taste|range_tag:10 %}
+                                                <i class="fas fa-star grey-star display-star"></i>
+                                                {% endfor %}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>  
-                    </div>                    
+                            </div>  
+                        </div> 
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="col">
+            
+        </div>
     </div>
-    {%for review in user_reviews%}
-    {%include 'drink/htmx/review_list_card.html'%}
-    {%endfor%}
-    {%for review in reviews%}
-    {%include 'drink/htmx/review_list_card.html'%}
-    {%endfor%}
+    <div class="row">
+        <div class="col">
+
+        </div>
+        <div class="col-auto" style="max-width:800px">
+            {%for review in user_reviews%}
+            {%include 'drink/htmx/review_list_card.html'%}
+            {%endfor%}
+            {%for review in reviews%}
+            {%include 'drink/htmx/review_list_card.html'%}
+            {%endfor%}
+        </div>
+        <div class="col">
+            
+        </div>
+    </div>
 </div>

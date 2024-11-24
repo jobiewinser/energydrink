@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 from django_countries.fields import CountryField
-from core.models import CURRENCY_CHOICES
+from core.models import CURRENCIES, CONTAINER_TYPES
 from django.db.models import Avg
 import math
 
@@ -15,21 +15,21 @@ def save_average_drink_reviews(drink):
     drink.save(calculate_average_reviews=False)
 
 
-class DrinkBrand(models.Model):
+class Brand(models.Model):
     name = models.TextField(null=False)
     submitted_by = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="drink_brand_submitted_by",
+        related_name="brand_submitted_by",
     )
     approved_by = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="drink_brand_approved_by",
+        related_name="brand_approved_by",
     )
     approved = models.BooleanField(default=False, blank=True)
 
@@ -39,10 +39,19 @@ def drink_file_name(instance, filename):
     return os.path.join("drinks", filename)
 
 
+class Container(models.Model):
+    CONTAINER_TYPE_CHOICES = CONTAINER_TYPES
+    container_type = models.CharField(choices=CONTAINER_TYPE_CHOICES, blank=True, null=True)
+    size = models.IntegerField(
+        null=True,
+        blank=True,
+    )
+
+
 class Drink(models.Model):
     name = models.TextField(null=False)
-    drink_brand = models.ForeignKey(
-        "drink.DrinkBrand",
+    brand = models.ForeignKey(
+        "drink.Brand",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -70,6 +79,10 @@ class Drink(models.Model):
         null=True,
         blank=True,
     )
+    calories_per_hundred_ml = models.IntegerField(
+        null=True,
+        blank=True,
+    )
 
     def save(
         self,
@@ -85,7 +98,7 @@ class Drink(models.Model):
 
 
 class Review(models.Model):
-    REVIEW_CURRENCY_CHOICES = CURRENCY_CHOICES
+    REVIEW_CURRENCIES = CURRENCIES
     created = models.DateTimeField(
         auto_now_add=True,
         null=True,
@@ -135,7 +148,7 @@ class Review(models.Model):
         null=True,
         blank=True,
     )
-    currency = models.CharField(choices=REVIEW_CURRENCY_CHOICES, blank=True, null=True)
+    currency = models.CharField(choices=REVIEW_CURRENCIES, blank=True, null=True)
 
     def save(
         self, force_insert=False, force_update=False, using=None, update_fields=None

@@ -1,6 +1,11 @@
 .energy-drink-theme {
-    background-color: #ff1b26; /* Bold, vibrant red */
     border-bottom: 5px solid #ffcf00; /* High contrast yellow border */
+}
+[data-bs-theme="light"]  .energy-drink-theme {
+    background-color: #ff1b26; /* Bold, vibrant red */
+}
+[data-bs-theme="dark"]  .energy-drink-theme {
+    background-color: #93252a; /* Bold, darker red */
 }
 
 .energy-drink-theme .navbar-brand {

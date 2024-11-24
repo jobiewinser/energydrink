@@ -4,9 +4,9 @@ from drink.models import *
 # Register your models here.
 
 
-class DrinkBrandAdmin(admin.ModelAdmin):
+class BrandAdmin(admin.ModelAdmin):
     list_display = ["pk", "name", "approved"]
     search_fields = ["pk", "name", "approved"]
 
 
-admin.site.register(DrinkBrand, DrinkBrandAdmin)
+admin.site.register(Brand, BrandAdmin)

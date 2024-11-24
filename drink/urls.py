@@ -4,7 +4,7 @@ import drink.htmx as drinkhtmx
 
 urlpatterns = [
     path(
-        "submit-drink-brand/", drinkhtmx.submit_drink_brand, name="submit-drink-brand"
+        "submit-drink-brand/", drinkhtmx.submit_brand, name="submit-drink-brand"
     ),
     path("edit-drink/", drinkviews.EditDrinkView.as_view(), name="edit-drink"),
     path("edit-drink/<int:pk>/", drinkviews.EditDrinkView.as_view(), name="edit-drink"),

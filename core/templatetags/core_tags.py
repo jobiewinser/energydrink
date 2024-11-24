@@ -29,3 +29,7 @@ def round_tag(number, digits):
 @register.filter
 def str_tag(var):
     return str(var)
+
+@register.filter
+def random_guid(anything):
+    return str(uuid.uuid4())

@@ -30,7 +30,7 @@ class ProfileView(TemplateView):
             self.template_name = "core/htmx/profile_htmx.html"
         context = super().get_context_data(**kwargs)
         context["countries"] = dict(countries)
-        context["currencies"] = coremodels.CURRENCY_CHOICES
+        context["currencies"] = coremodels.CURRENCIES
         profile, created = coremodels.Profile.objects.get_or_create(
             user=self.request.user
         )
@@ -120,3 +120,10 @@ class LoginView(TemplateView):
 def logout_func(request):
     logout(request)
     return redirect("login")
+
+@login_required
+def change_theme(request):
+    profile = request.user.profile
+    profile.theme = request.POST.get('theme', 'light')
+    profile.save()
+    return HttpResponse("Successfully changed theme", status=200)

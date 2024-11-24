@@ -18,7 +18,7 @@ class EditDrinkView(TemplateView):
         if self.request.META.get("HTTP_HX_REQUEST", "false") == "true":
             self.template_name = "drink/htmx/edit_drink_htmx.html"
         context = super().get_context_data(**kwargs)
-        context["brands"] = drinkmodels.DrinkBrand.objects.filter(
+        context["brands"] = drinkmodels.Brand.objects.filter(
             Q(approved=True) | Q(submitted_by=self.request.user)
         )
         if pk:
@@ -44,13 +44,13 @@ class EditDrinkView(TemplateView):
         name = request.POST.get("drink_name")
         if not name:
             return HttpResponse("Please enter a valid Drink Name", status=400)
-        drink_brand_id = request.POST.get("drink_brand")
-        if not drink_brand_id:
+        brand_id = request.POST.get("brand")
+        if not brand_id:
             return HttpResponse("Please select a valid Brand", status=400)
         caffeine_per_hundred_ml = request.POST.get("caffeine_per_hundred_ml") or None
         drink.name = name.strip()
-        drink_brand = drinkmodels.DrinkBrand.objects.get(pk=drink_brand_id)
-        drink.drink_brand = drink_brand
+        brand = drinkmodels.Brand.objects.get(pk=brand_id)
+        drink.brand = brand
         image = request.FILES.get("image")
         if image:
             drink.image = request.FILES.get("image")
@@ -58,7 +58,7 @@ class EditDrinkView(TemplateView):
         matching_drinks = drinkmodels.Drink.objects.filter(
             Q(approved=True) | Q(submitted_by=request.user),
             name=name,
-            drink_brand=drink_brand,
+            brand=brand,
             caffeine_per_hundred_ml=caffeine_per_hundred_ml,
         )
         if pk:
@@ -83,7 +83,7 @@ class ReviewDrinkView(TemplateView):
         drink = drinkmodels.Drink.objects.get(pk=kwargs["pk"])
         context["drink"] = drink
         context["countries"] = dict(countries)
-        context["currencies"] = coremodels.CURRENCY_CHOICES
+        context["currencies"] = coremodels.CURRENCIES
         context["review"] = drinkmodels.Review.objects.filter(
             submitted_by=self.request.user,
             drink=drink,
@@ -156,7 +156,7 @@ class ListDrinksView(TemplateView):
             else:
                 view = "gallery"
         context["view"] = view
-        context["drink_brands"] = drinkmodels.DrinkBrand.objects.all()
+        context["brands"] = drinkmodels.Brand.objects.all()
         context["show_filters"] = self.request.GET.get("show_filters") == "true"
 
         return context
@@ -189,7 +189,7 @@ def search_drinks(request):
     taste = request.GET.get("taste")
     caffeine_per_hundred_ml = request.GET.get("caffeine_per_hundred_ml")
     sort = request.GET.get("sort")
-    drink_brand = request.GET.get("drink_brand")
+    brand = request.GET.get("brand")
     search = (request.GET.get("search") or "").strip()
 
     # if request.user.id:
@@ -212,11 +212,11 @@ def search_drinks(request):
                 drinks = drinks.order_by("-count")
         else:
             drinks = drinks.order_by(sort)
-    if drink_brand:
-        drinks = drinks.filter(drink_brand__id=drink_brand)
+    if brand:
+        drinks = drinks.filter(brand__id=brand)
     if search:
         drinks = drinks.filter(
-            Q(name__icontains=search) | Q(drink_brand__name__icontains=search)
+            Q(name__icontains=search) | Q(brand__name__icontains=search)
         )
     context["drinks"] = drinks
     return render(request, template_name, context)

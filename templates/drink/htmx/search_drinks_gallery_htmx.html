@@ -8,7 +8,7 @@
     {% for drink in drinks %}
     <div class="col-auto mb-3">
         <div class="card" style="height:320px; width:230px;">
-            <div class="center">
+            <div class="center image-container image-container-hover">
                 <a
                     href="{%url 'view-drink' pk=drink.pk%}" 
                     hx-get="{%url 'view-drink' pk=drink.pk%}" 
@@ -36,19 +36,18 @@
                                     hx-push-url="true">
                                     <h5 class="card-title elipses-overflow pb-1 hover-link">{{ drink.name }}</h5>
                                 </a>
-                                
-                                <a class="nowrap" href="#"
-                                    hx-get="{%url 'search-drinks'%}?drink_brand={{drink.drink_brand.pk}}&show_filters=true" hx-target="#search-drinks-content"
+                                <a href="#"
+                                    hx-get="{%url 'list-drinks'%}?brand={{drink.brand.pk}}&show_filters=true" hx-target="#content"
                                     hx-swap="innerHTML"
                                     hx-indicator="#page_load_indicator"
                                     hx-push-url="true">
-                                    <h6 class="card-subtitle mb-2 text-muted elipses-overflow hover-link">{{ drink.drink_brand.name }}</h6>
-                                </a>                                
+                                    <h6 class="card-title elipses-overflow pb-1 hover-link">{{ drink.brand.name }}</h6>
+                                </a>                            
                             </div>
                         </div>
                         <div class="row m-0">
                             <div class="col p-0 pe-1 right nowrap">
-                                <p class="card-text mb-0" style="font-size:13px">{%if drink.caffeine_per_hundred_ml is not None%}{{ drink.caffeine_per_hundred_ml|round_tag:0 }}{%else%}?{%endif%} <span class="text-black-50" style="font-size:12px">mg/100ml</span></p>
+                                <p class="card-text mb-0" style="font-size:13px">{%if drink.caffeine_per_hundred_ml is not None%}{{ drink.caffeine_per_hundred_ml|round_tag:0 }}{%else%}?{%endif%} <span class="text-50" style="font-size:12px">mg/100ml</span></p>
                             </div>
                             <div class="col p-0 ps-1 nowrap">
                                 <a href="{%url 'reviews' pk=drink.pk%}"
