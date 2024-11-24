@@ -1,6 +1,6 @@
 {%load static core_tags%}
 <!DOCTYPE html>
-<html id="html" lang="en" data-bs-theme="{%if request.user.profile.theme%}{{request.user.profile.theme}}{%else%}light{%endif%}">
+<html id="html" data-bs-theme="dark" lang="en">
     <head>
         <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
         <meta charset="UTF-8">
@@ -49,6 +49,9 @@
                     evt.detail.headers['x-csrftoken'] = '{{csrf_token}}';
                 }
                 document.body.addEventListener('htmx:configRequest', handlehtmxconfigRequest);
+
+                
+                
             });
             function select2stuff(){
                 $('.select2:not([data-select2-id])').select2({
@@ -132,9 +135,25 @@
                     }
                 }
             };
+        </script>
 
+        <script> //theme stuff
+            $(document).ready(function () {
+                // Retrieve theme preference from localStorage or default to light.
+                const savedTheme = localStorage.getItem('theme') || 'dark';
+                setTheme(savedTheme);
+                document.getElementById('theme-switch').checked = savedTheme === 'dark';
+        
+                // Listen for theme change events.
+                document.getElementById('theme-switch').addEventListener('change', function () {
+                    const newTheme = this.checked ? 'dark' : 'light';
+                    setTheme(newTheme);
+                    localStorage.setItem('theme', newTheme);
+                });
+            });
+        
             const setTheme = function (theme) {
-                document.getElementById('html').setAttribute('data-bs-theme', theme)
+                document.getElementById('html').setAttribute('data-bs-theme', theme);
             }
         </script>
     </head>

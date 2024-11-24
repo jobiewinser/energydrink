@@ -134,8 +134,8 @@
                                 <option {%if request.GET.sort == '-caffeine_per_hundred_ml'%}selected{%endif%} value="-caffeine_per_hundred_ml">Caffeine (mg/100ml) - ↓</option>
                                 <option {%if request.GET.sort == 'review_drink__count'%}selected{%endif%} value="review_drink__count">Number of Reviews - ↑</option>
                                 <option {%if request.GET.sort == '-review_drink__count' or not request.GET.sort%}selected{%endif%} value="-review_drink__count">Number of Reviews - ↓</option>
-                                <option {%if request.GET.sort == 'average_taste'%}selected{%endif%} value="average_taste">Average Taste - ↑</option>
-                                <option {%if request.GET.sort == '-average_taste'%}selected{%endif%} value="-average_taste">Average Taste - ↓</option>
+                                <option {%if request.GET.sort == 'average_taste'%}selected{%endif%} value="average_taste">Avg taste - ↑</option>
+                                <option {%if request.GET.sort == '-average_taste'%}selected{%endif%} value="-average_taste">Avg taste - ↓</option>
                                 <option {%if request.GET.sort == 'name'%}selected{%endif%} value="name">Name - ↑</option>
                                 <option {%if request.GET.sort == '-name'%}selected{%endif%} value="-name">Name - ↓</option>
                                 <option {%if request.GET.sort == 'brand__name'%}selected{%endif%} value="brand__name">Brand Name - ↑</option>

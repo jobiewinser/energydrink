@@ -116,14 +116,9 @@ class LoginView(TemplateView):
         return response
 
 
-@login_required
 def logout_func(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
     logout(request)
-    return redirect("login")
-
-@login_required
-def change_theme(request):
-    profile = request.user.profile
-    profile.theme = request.POST.get('theme', 'light')
-    profile.save()
-    return HttpResponse("Successfully changed theme", status=200)
+    response = redirect('login')
+    return response

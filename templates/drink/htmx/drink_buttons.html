@@ -24,7 +24,7 @@
         </a>
         {%endif%}
     </div>
-    {%if user.is_superuser%}
+    {%if user.is_superuser and not hide_edit%}
     <div class="col-auto nowrap p-0">
         <a class="btn btn-xs btn-success" href="#"
             hx-get="{%url 'edit-drink' pk=drink.pk%}" hx-target="#content"

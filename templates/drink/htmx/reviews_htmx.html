@@ -69,7 +69,7 @@
                                     <div class="col ps-1 pe-0">
                                         <div class="taste-rating nowrap center">
                                             <div class="nowrap pe-2 ps-0">
-                                                <span class="card-text" style="font-size:11px">Average Taste</span>
+                                                <span class="card-text" style="font-size:11px">Avg taste</span>
                                                 <br>
                                                 {% for star in 0|range_tag:drink.average_taste %}
                                                 <i class="fas fa-star yellow-star display-star"></i>
@@ -92,10 +92,10 @@
         </div>
     </div>
     <div class="row">
-        <div class="col">
+        <div class="col p-0">
 
         </div>
-        <div class="col-auto" style="max-width:800px">
+        <div class="col-auto p-0" style="max-width:800px">
             {%for review in user_reviews%}
             {%include 'drink/htmx/review_list_card.html'%}
             {%endfor%}
@@ -103,7 +103,7 @@
             {%include 'drink/htmx/review_list_card.html'%}
             {%endfor%}
         </div>
-        <div class="col">
+        <div class="col p-0">
             
         </div>
     </div>

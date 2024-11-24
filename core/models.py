@@ -194,13 +194,6 @@ class Profile(models.Model):
         null=True,
         blank=True,
     )
-    theme = models.CharField(max_length=10, default="dark", blank=True)
-    # city = models.ForeignKey(
-    #     "core.City",
-    #     on_delete=models.SET_NULL,
-    #     null=True,
-    #     blank=True,
-    # )
     display_name = models.TextField(blank=True, null=True)
     country = CountryField(blank_label="(select country)", blank=True, null=True)
     currency = models.CharField(choices=PROFILE_CURRENCIES, blank=True, null=True)

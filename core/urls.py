@@ -7,6 +7,4 @@ urlpatterns = [
     path("logout/", coreviews.logout_func, name="logout"),
     path("register/", coreviews.RegisterView.as_view(), name="register"),
     path("login/", coreviews.LoginView.as_view(), name="login"),
-    path('change-theme/', coreviews.change_theme, name='change-theme'),
-    # path('accounts/register/', coreviews.RegisterNewCompanyView.as_view(), name='register'),
 ]

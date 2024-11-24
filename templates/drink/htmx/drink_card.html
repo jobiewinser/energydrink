@@ -49,7 +49,7 @@
                 {%include 'drink/htmx/drink_buttons.html'%}
                 {% endif %}
                 {%if drink.review_drink.exists%}
-                <div class="taste-rating">
+                <div class="taste-rating mt-1">
                     <div class="row m-0">
                         <div class="col p-0">
                         </div>
@@ -62,7 +62,7 @@
                             {% endfor %}
                         </div>
                         <div class="col-auto p-0">
-                            <span class="card-text" style="font-size:13px">Taste</span>
+                            <span class="card-text" style="font-size:13px">Avg Taste</span>
                         </div>
                         <div class="col p-0">
                         </div>
