@@ -1,0 +1,38 @@
+{%load static core_tags drink_tags%}
+<div class="row m-0 mt-1 nowrap">
+    <div class="col p-0">
+    </div>
+    <div class="col-auto nowrap p-0">
+        <a class="btn btn-xs btn-light nowrap" href="#"
+            hx-get="{%url 'reviews' pk=drink.pk%}" hx-target="#content"
+            hx-swap="innerHTML"
+            hx-indicator="#page_load_indicator"
+            hx-push-url="true">{{drink.review_drink.count}} Review{%if not drink.review_drink.count == 1%}s{%endif%}</a>
+    </div>
+    <div class="col-auto nowrap p-0 ps-1 pe-1">
+        {%if request.user.id%}
+            <a class="btn btn-xs btn-primary" href="#"
+                hx-get="{% url 'review-drink' pk=drink.pk %}" hx-target="#content"
+                hx-swap="innerHTML"
+                hx-indicator="#page_load_indicator"
+                hx-push-url="true">
+                Review This
+            </a>
+        {%else%}
+        <a class="nowrap btn btn-xs btn-primary" href="/accounts/login/?next={% url 'review-drink' pk=drink.pk %}">
+            Login to Review
+        </a>
+        {%endif%}
+    </div>
+    {%if user.is_superuser%}
+    <div class="col-auto nowrap p-0">
+        <a class="btn btn-xs btn-success" href="#"
+            hx-get="{%url 'edit-drink' pk=drink.pk%}" hx-target="#content"
+            hx-swap="innerHTML"
+            hx-indicator="#page_load_indicator"
+            hx-push-url="true">Edit Drink</a>
+    </div>
+    {%endif%}
+    <div class="col p-0">
+    </div>
+</div>

@@ -22,7 +22,7 @@
                         <div class="mb-3">
                             <label for="brand_name" class="form-label">Brand Name</label>
                             <input type="text" class="form-control" id="brand_name" name="brand_name" aria-describedby="brand_name">
-                            <div id="brandNameHelp" class="form-text">The name of the brand you are submitting.</div>
+                            <div id="brandNameHelp" class="form-text">The name of the drink brand you are submitting.</div>
                         </div>
                         {% csrf_token %}
                     </form>
@@ -35,6 +35,11 @@
         </div>
     </div>
 
+    <div class="row mt-2">
+        <div class="col center">
+            <h1>{%if drink%}Edit{%else%}Submit a{%endif%} Drink</h1>
+        </div>
+    </div>
     <div class="row mt-3">
         <div class="col">
         </div>

@@ -5,30 +5,16 @@
             location.reload();
         }
     </script>
+    <div class="row mt-2">
+        <div class="col center">
+            <h1>View Drink</h1>
+        </div>
+    </div>
     <div class="row mt-3">
         <div class="col">
         </div>
-        <div class="col">
-            <div class="card">
-                <div class="center image-container">
-                    {%if drink.image%}
-                    <img src="{{ drink.image.url }}" class="card-img-top" alt="{{ drink.name }}" style="padding:6px; max-width:180px; max-height:180px; width: auto; height: auto;">
-                    {%else%}
-                    <img src="{%static 'img/mystery-can.webp'%}" class="card-img-top" style="padding:6px; max-width:180px; max-height:180px; width: auto; height: auto;">
-                    {%endif%}
-                </div>
-                <div class="card-body">
-                    <div class="row m-0">
-                        <div class="col p-0">
-                        </div>
-                        <div class="col">
-                            {%include 'drink/htmx/drink_card.html'%}
-                        </div>
-                        <div class="col p-0">
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="col-auto">
+            {%include 'drink/htmx/drink_card.html'%}
         </div>
         <div class="col">
         </div>

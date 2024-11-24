@@ -5,71 +5,23 @@
             location.reload();
         }
     </script>
+    <div class="row mt-2">
+        <div class="col center">
+            <h1>Review Drink</h1>
+        </div>
+    </div>
     <div class="row mt-3">
         <div class="col">
         </div>
         <div class="col-auto">
             <div class="card p-3">
                 <div class="row">
-                    <div class="col center">
-                        <div class="card">
-                            <div class="center image-container image-container-hover">
-                                <a
-                                    href="{%url 'view-drink' pk=drink.pk%}" 
-                                    hx-get="{%url 'view-drink' pk=drink.pk%}" 
-                                    hx-target="#content"
-                                    hx-swap="innerHTML"
-                                    hx-indicator="#page_load_indicator"
-                                    hx-push-url="true">
-                                    {%if drink.image%}
-                                    <img src="{{ drink.image.url }}" class="card-img-top" alt="{{ drink.name }}" style="padding:6px; max-width:180px; max-height:180px; width: auto; height: auto;">
-                                    {%else%}
-                                    <img src="{%static 'img/mystery-can.webp'%}" class="card-img-top" style="padding:6px; max-width:180px; max-height:180px; width: auto; height: auto;">
-                                    {%endif%}
-                                </a>
-                            </div>
-                            <div class="card-body">
-                                <div class="row m-0">
-                                    <div class="col p-0">
-                                    </div>
-                                    <div class="col-auto">
-                                        <div class="row m-0">
-                                            <div class="col center">
-                                                <a href="{%url 'view-drink' pk=drink.pk%}" hx-get="{%url 'view-drink' pk=drink.pk%}" hx-target="#content"
-                                                    hx-swap="innerHTML"
-                                                    hx-indicator="#page_load_indicator"
-                                                    hx-push-url="true">
-                                                    <h5 class="card-title elipses-overflow pb-1 hover-link">{{ drink.name }}</h5>
-                                                </a>
-                                            
-                                                <a class="nowrap" href="#"
-                                                    hx-get="{%url 'list-drinks'%}?brand={{drink.brand.pk}}&show_filters=true" hx-target="#content"
-                                                    hx-swap="innerHTML"
-                                                    hx-indicator="#page_load_indicator"
-                                                    hx-push-url="true">
-                                                    <h6 class="card-subtitle mb-2 text-muted elipses-overflow hover-link">{{ drink.brand.name }}</h6>
-                                                </a>
-                                                        
-                                            </div>
-                                        </div>
-                                        <div class="row m-0">
-                                            <div class="col p-0 pe-1 right nowrap">
-                                                <p class="card-text mb-0" style="font-size:13px">{%if drink.caffeine_per_hundred_ml is not None%}{{ drink.caffeine_per_hundred_ml|round_tag:0 }}{%else%}?{%endif%} <span class="text-50" style="font-size:12px">mg/100ml</span></p>
-                                            </div>
-                                            <div class="col p-0 ps-1 nowrap">
-                                                <a href="#"
-                                                hx-get="{%url 'reviews' pk=drink.pk%}" hx-target="#content"
-                                                hx-swap="innerHTML"
-                                                hx-indicator="#page_load_indicator"
-                                                hx-push-url="true" class="nowrap">{{drink.review_drink.count}} Review{%if not drink.review_drink.count == 1%}s{%endif%}</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col p-0">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col center">                        
+                        {%with hide_caffeine=True%}
+                        {%with hide_buttons=True%}
+                        {%include 'drink/htmx/drink_card.html'%}
+                        {%endwith%}
+                        {%endwith%}
                     </div>
                     <div class="col center">
                         <form id="review_form"

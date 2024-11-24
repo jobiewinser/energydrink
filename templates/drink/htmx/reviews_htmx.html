@@ -6,6 +6,11 @@
             location.reload();
         }
     </script>
+    <div class="row mt-2">
+        <div class="col center">
+            <h1>Reviews</h1>
+        </div>
+    </div>
     <div class="row">
         <div class="col">
 
@@ -18,7 +23,7 @@
                     hx-indicator="#page_load_indicator"
                     hx-push-url="true"
                     hx-trigger="click">
-                    <div class="d-flex align-items-center" style="height:85px">
+                    <div class="d-flex align-items-center">
                         <div class="center image-container image-container-hover">
                             {% if drink.image %}
                             <img src="{{ drink.image.url }}" class="card-img-top drink-img" alt="{{ drink.name }}" style="padding:3px; width:50px; height:85px;">
